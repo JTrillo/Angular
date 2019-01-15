@@ -1,0 +1,148 @@
+<div class="container">
+    <h1>Pipes</h1>
+    <hr>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>Variable</th>
+                <th>Pipe</th>
+                <th>Producto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{name}}</td>
+                <td>uppercase</td>
+                <td>{{name | uppercase}}</td>
+            </tr>
+
+            <tr>
+                <td>{{name}}</td>
+                <td>lowercase</td>
+                <td>{{name | lowercase}}</td>
+            </tr>
+
+            <tr>
+                <td>{{name}}</td>
+                <td>slice:3</td>
+                <td>{{name | slice:3}}</td>
+            </tr>
+
+            <tr>
+                <td>{{name}}</td>
+                <td>slice:0:2</td>
+                <td>{{name | slice:0:2}}</td>
+            </tr>
+
+            <tr>
+                <td>{{numeros}}</td>
+                <td>slice:3</td>
+                <td>{{numeros | slice:3}}</td>
+            </tr>
+
+            <tr>
+                <td>{{numeros}}</td>
+                <td>slice:0:2</td>
+                <td>{{numeros | slice:0:2}}</td>
+            </tr>
+
+            <tr>
+                <td>{{numero}}</td>
+                <td>number:'3.0-0'</td>
+                <td>{{numero | number:'3.0-0'}}</td>
+            </tr>
+
+            <tr>
+                <td>{{numero}}</td>
+                <td>number:'1.0-6'</td>
+                <td>{{numero | number:'1.0-6'}}</td>
+            </tr>
+
+            <tr>
+                <td>{{numero}}</td>
+                <td>percent</td>
+                <td>{{numero | percent}}</td>
+            </tr>
+
+            <tr>
+                <td>{{numero}}</td>
+                <td>percent:'0.0-4</td>
+                <td>{{numero | percent:'0.0-4'}}</td>
+            </tr>
+
+            <tr>
+                <td>{{salario}}</td>
+                <td>currency:'EUR':true</td>
+                <td>{{salario | currency:'EUR':true}}</td>
+            </tr>
+
+            <tr>
+                <td>{{salario}}</td>
+                <td>currency:'EUR':false:'0.0-1'</td>
+                <td>{{salario | currency:'EUR':false:'0.0-1'}}</td>
+            </tr>
+
+            <tr>
+                <td>{{valorDePromesa}}</td>
+                <td>async</td>
+                <td>{{valorDePromesa | async}}</td>
+            </tr>
+
+            <tr>
+                <td>{{hoy}}</td>
+                <td>date</td>
+                <td>{{hoy | date}}</td>
+            </tr>
+
+            <tr>
+                <td>{{hoy}}</td>
+                <td>date:'medium'</td>
+                <td>{{hoy | date:'medium'}}</td>
+            </tr>
+
+            <tr>
+                <td>{{hoy}}</td>
+                <td>date:'MMMM - d'</td>
+                <td>{{hoy | date:'MMMM - d'}}</td>
+            </tr>
+
+            <tr>
+                <td>{{nombre_completo}}</td>
+                <td>capitalizado</td>
+                <td>{{nombre_completo | capitalizado}}</td>
+            </tr>
+
+            <tr>
+                <td>{{nombre_completo}}</td>
+                <td>capitalizado:false</td>
+                <td>{{nombre_completo | capitalizado:false}}</td>
+            </tr>
+
+            <tr>
+                <td>{{name}}</td>
+                <td>
+                    contrasena:{{contrasena}}
+                    <br>
+                    <button type="button" class="btn btn-outline-primary" (click)="contrasena = !contrasena">Activar/desactivar</button>
+                </td>
+                <td>{{name | contrasena:contrasena}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h4>slice:2:5</h4>
+    <ul>
+        <li *ngFor="let numero of numeros | slice:2:5">{{numero}}</li>
+    </ul>
+
+    <h4>JSON</h4>
+    <pre>
+        {{object | json}}
+    </pre>
+
+    <h4>Youtube <small>video</small></h4>
+    <hr>
+    <iframe width="560" height="315" [src]="video | domseguro:'https://www.youtube.com/embed/'" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+
+</div>

@@ -1,0 +1,33 @@
+<form [formGroup]="form" (ngSubmit)="addCase()">
+    <div>
+
+        <div class="form-group row">
+            <label class="col-2 col-form-label">Case identifier</label>
+            <div class="col-8">
+                <input type="text" class="form-control" placeholder="Enter identifier" formControlName="identifier">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-2 col-form-label">Case description</label>
+            <div class="col-8">
+                <textarea class="form-control" rows="3" placeholder="Enter description" formControlName="description"></textarea>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-group row">
+        <label class="col-2 col-form-label">&nbsp;</label>
+        <div class="input-group col-8">
+            <button type="submit" class="btn btn-outline-primary" [disabled]="form.invalid">Add new case</button>
+        </div>
+    </div>
+
+    <div class="form-group row" [hidden]="form.valid">
+        <div class="alert alert-warning col-10" role="alert">
+            All fields must be filled
+        </div>
+    </div>
+
+</form>
