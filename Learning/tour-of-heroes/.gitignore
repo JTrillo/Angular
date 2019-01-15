@@ -39,4 +39,4 @@ testem.log
 Thumbs.db
 
 # When executing npm install package-lock.json will be generated again
-package-lock.json
+/package-lock.json
