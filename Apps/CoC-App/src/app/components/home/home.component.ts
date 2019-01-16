@@ -1,16 +1,20 @@
 import { Component, OnInit } from '@angular/core';
+import { HyperledgerService, Case, Evidence } from 'src/app/services/hyperledger.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styles: []
 })
 export class HomeComponent implements OnInit {
-
-  title1:string = "My opened cases";
-  title2:string = "My evidences";
   
-  constructor() { }
+  cases: Case[];
+  evidences: Evidence[];
+
+  constructor(private hyperledger: HyperledgerService) {
+    this.cases = this.hyperledger.getUserCases();
+    this.evidences = this.hyperledger.getUserEvidences();
+  }
 
   ngOnInit() {
   }

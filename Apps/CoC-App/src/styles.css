@@ -1,8 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
 
+.routerOutlet {
+    margin-top: 20px;
+    padding-bottom: 50px;
+}
+
 footer {
     color: white;
     position: fixed;
     bottom: 0px;
     width: stretch;
+    height: 50px;
+}
+
+hr {
+    border: 0;
+    clear: both;
+    display: block;
+    width: 100%;
+    background-color: grey;
+    height: 2px;
+}
+
+label {
+    font-weight: bold;
 }

@@ -8,6 +8,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './components/home/home.component';
 import { NewCaseComponent } from './components/new-case/new-case.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { NewCaseComponent } from './components/new-case/new-case.component';
     HeaderComponent,
     FooterComponent,
     HomeComponent,
-    NewCaseComponent
+    NewCaseComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

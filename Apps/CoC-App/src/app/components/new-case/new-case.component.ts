@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators} from '@angular/forms';
 @Component({
   selector: 'app-new-case',
   templateUrl: './new-case.component.html',
-  styleUrls: ['./new-case.component.css']
+  styles: []
 })
 export class NewCaseComponent implements OnInit {
 

@@ -1,0 +1,38 @@
+<div>
+    <div *ngIf="other_profile; else other_content">
+        <h1>User {{profile.identifier}}'s profile</h1>
+    </div>
+    <ng-template #other_content>
+        <h1>My Profile (identifier in the system: {{profile.identifier}})</h1>
+    </ng-template>
+    <hr>
+
+    <div class="form-group row">
+        <label class="col-md-2 col-form-label">Full Name:</label>
+        <input type="text" class="col-md-4 form-control" [value]="profile.firstName.concat(' ', profile.lastName)" [disabled]="true">
+
+        <label class="col-md-2 col-form-label">Birthdate:</label>
+        <input type="date" class="col-md-4 form-control" [value]="birthdate_display" [disabled]="true">
+    </div>
+
+    <div class="form-group row">
+        <label class="col-md-2 col-form-label">Gender:</label>
+        <input type="text" class="col-md-4 form-control" [value]="profile.gender" [disabled]="true">
+
+        <label class="col-md-2 col-form-label">Job:</label>
+        <input type="text" class="col-md-4 form-control" [value]="profile.job" [disabled]="true">
+    </div>
+
+    <div class="form-group row">
+        <label class="col-md-2 col-form-label">Studies:</label>
+        <input type="text" class="col-md-4 form-control" [value]="profile.studies" [disabled]="true">
+
+        <label class="col-md-2 col-form-label">Office:</label>
+        <input type="text" class="col-md-4 form-control" [value]="profile.office" [disabled]="true">
+    </div>
+
+    <div class="form-group now" *ngIf="other_profile">
+        <button type="button" class="btn btn-outline-primary col-md-2 offset-md-5" (click)="backPressed()">Back</button>
+    </div>
+
+</div>
