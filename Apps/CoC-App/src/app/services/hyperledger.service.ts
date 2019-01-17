@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { UserDataService } from './user-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -39,40 +40,9 @@ export class HyperledgerService {
     }
   ];
 
-  constructor() {
+  constructor(private userdata: UserDataService) {
     console.log("HyperledgerService loaded");
   }
-
-  //When logging, to set user profile
-  setUserProfile(profile:Profile){
-    this.userProfile = profile;
-  }
-
-  //Retrieve current user profile
-  getUserProfile(): Profile{
-    return this.userProfile;
-  }
-
-  //When logging, to set user cases
-  setUserCases(userCases: Case[]){
-    this.userCases = userCases;
-  }
-
-  //Retrieves cases in which current user is involved
-  getUserCases(): Case[]{
-    return this.userCases;
-  }
-
-  //When logging, to set user evidences
-  setUserEvidences(userEvidences: Evidence[]){
-    this.userEvidences = userEvidences;
-  }
-
-  //Retrieves the evidences of current user
-  getUserEvidences(): Evidence[]{
-    return this.userEvidences;
-  }
-
 
   //Retrieve any user profile
   getProfile(identifier:string): Profile{
@@ -89,14 +59,14 @@ export class HyperledgerService {
     return profile;
   }
 
-  //Get current user cases
-  getCases(): Case[]{
-    return undefined;
+  //Get current user cases from blockchain and stores them in UserDataService
+  getCases(){
+    this.userdata.setUserCases(this.userCases);
   }
 
-  //Get current user evidences
-  getEvidences(): Evidence[]{
-    return undefined;
+  //Get current user evidences from blockchain and stores them in UserDataService
+  getEvidences(){
+    this.userdata.setUserEvidences(this.userEvidences);
   }
 }
 

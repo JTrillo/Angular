@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HyperledgerService, Case, Evidence } from 'src/app/services/hyperledger.service';
+import { Case, Evidence } from 'src/app/services/hyperledger.service';
+import { UserDataService } from 'src/app/services/user-data.service';
 
 @Component({
   selector: 'app-home',
@@ -11,9 +12,9 @@ export class HomeComponent implements OnInit {
   cases: Case[];
   evidences: Evidence[];
 
-  constructor(private hyperledger: HyperledgerService) {
-    this.cases = this.hyperledger.getUserCases();
-    this.evidences = this.hyperledger.getUserEvidences();
+  constructor(private userdata: UserDataService) {
+    this.cases = this.userdata.getUserCases();
+    this.evidences = this.userdata.getUserEvidences();
   }
 
   ngOnInit() {

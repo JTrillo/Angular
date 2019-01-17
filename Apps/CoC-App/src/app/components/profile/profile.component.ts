@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HyperledgerService, Profile } from 'src/app/services/hyperledger.service';
+import { Profile, HyperledgerService } from 'src/app/services/hyperledger.service';
+import { UserDataService } from 'src/app/services/user-data.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -14,7 +15,8 @@ export class ProfileComponent implements OnInit {
   birthdate_display:string;
   other_profile:boolean = false;
 
-  constructor(private hyperledger:HyperledgerService,
+  constructor(private userdata:UserDataService,
+              private hyperledger:HyperledgerService,
               private activatedRoute: ActivatedRoute,
               private location: Location
   ) {
@@ -24,7 +26,7 @@ export class ProfileComponent implements OnInit {
         this.profile = this.hyperledger.getProfile(params['user_id']);
         this.other_profile = true;
       }else{
-        this.profile = this.hyperledger.getUserProfile();
+        this.profile = this.userdata.getUserProfile();
       }
     });
     this.birthdate_display = `${this.profile.birthdate.getFullYear()}-${this.profile.birthdate.getMonth()+1}-${this.profile.birthdate.getDate()}`;
