@@ -40,9 +40,7 @@ export class HyperledgerService {
     }
   ];
 
-  constructor(private userdata: UserDataService) {
-    console.log("HyperledgerService loaded");
-  }
+  constructor(private userdata: UserDataService) { }
 
   //Retrieve any user profile
   getProfile(identifier:string): Profile{

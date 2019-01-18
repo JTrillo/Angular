@@ -2,7 +2,12 @@
 
 .routerOutlet {
     margin-top: 20px;
-    padding-bottom: 50px;
+    padding-bottom: 60px;
+}
+
+.loginDiv {
+    border: 2px solid grey;
+    border-radius: 5px;
 }
 
 footer {

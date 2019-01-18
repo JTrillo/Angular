@@ -10,9 +10,7 @@ export class UserDataService {
   private userCases:Case[];
   private userEvidences:Evidence[];
 
-  constructor() {
-    console.log("UserDataService loaded")
-  }
+  constructor() { }
 
   //When logging, to set user profile
   setUserProfile(profile:Profile){
