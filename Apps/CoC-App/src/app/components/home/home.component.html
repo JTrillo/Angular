@@ -10,7 +10,7 @@
                         <div class="card-body">
                             <h5 align="center" style="text-transform: uppercase;" class="card-title">{{case.identifier}}</h5>
                             <p class="card-text">{{case.description}}</p>
-                            <a href="#" class="btn btn-outline-primary btn-block">See details</a>
+                            <a [routerLink]="['/case',case.identifier]" class="btn btn-outline-primary btn-block">See details</a>
                         </div>
                     </div>
                 </div>

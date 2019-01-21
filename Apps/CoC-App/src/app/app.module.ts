@@ -10,6 +10,7 @@ import { HomeComponent } from './components/home/home.component';
 import { NewCaseComponent } from './components/new-case/new-case.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { LoginComponent } from './components/login/login.component';
+import { CaseComponent } from './components/case/case.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { LoginComponent } from './components/login/login.component';
     HomeComponent,
     NewCaseComponent,
     ProfileComponent,
-    LoginComponent
+    LoginComponent,
+    CaseComponent
   ],
   imports: [
     BrowserModule,

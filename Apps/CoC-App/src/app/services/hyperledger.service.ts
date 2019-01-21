@@ -9,8 +9,8 @@ export class HyperledgerService {
   //THOSE VARIABLES MUST NOT BE INITIALIZED HERE
   private userProfile:Profile = {
     identifier: "12345",
-    firstName: "Joaquín",
-    lastName: "Trillo",
+    firstName: "Bob",
+    lastName: "Protocolo",
     birthdate: new Date(1994,10,23),
     gender: "Male",
     job: "Detective",
@@ -23,7 +23,7 @@ export class HyperledgerService {
       description:"Grand Theft Auto",
       openingDate: new Date(),
       status:"OPENED",
-      openingBy:this.userProfile,
+      openedBy:this.userProfile,
       participants:[this.userProfile]
     }
   ];
@@ -36,8 +36,15 @@ export class HyperledgerService {
       additionDate:new Date(),
       owner:this.userProfile,
       olderOwners:[],
-      case:this.userCases[0]
-    }
+      case:this.userCases[0]},
+    { identifier:"EVD002",
+      hash:"A156456156D4351545F6",
+      hashType:"SHA-1",
+      description:"Image",
+      additionDate:new Date(),
+      owner:this.userProfile,
+      olderOwners:[],
+      case:this.userCases[0]}
   ];
 
   constructor(private userdata: UserDataService) { }
@@ -66,6 +73,11 @@ export class HyperledgerService {
   getEvidences(){
     this.userdata.setUserEvidences(this.userEvidences);
   }
+
+  //Get evidences from case X
+  getCaseEvidences(case_id:string):Evidence[]{
+    return this.userEvidences;
+  }
 }
 
 export interface Profile {
@@ -86,7 +98,7 @@ export interface Case {
   resolution?:string,
   closureDate?:Date,
   status:string,
-  openingBy:Profile,
+  openedBy:Profile,
   participants:Profile[]
 }
 

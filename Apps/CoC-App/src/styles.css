@@ -24,7 +24,9 @@ hr {
     display: block;
     width: 100%;
     background-color: grey;
-    height: 2px;
+    height: 1px;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 label {
