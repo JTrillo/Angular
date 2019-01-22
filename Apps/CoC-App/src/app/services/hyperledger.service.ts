@@ -7,16 +7,26 @@ import { UserDataService } from './user-data.service';
 export class HyperledgerService {
 
   //THOSE VARIABLES MUST NOT BE INITIALIZED HERE
-  private userProfile:Profile = {
-    identifier: "12345",
-    firstName: "Bob",
-    lastName: "Protocolo",
-    birthdate: new Date(1990,10,20),
-    gender: "Male",
-    job: "Detective",
-    studies: "Software Engineer",
-    office: "Málaga"
-  };
+  private userProfiles:Profile[] = [
+    { identifier: "12345",
+      firstName: "Bob",
+      lastName: "Protocolo",
+      birthdate: new Date(1990,10,20),
+      gender: "Male",
+      job: "Detective",
+      studies: "Software Engineer",
+      office: "Málaga"
+    },
+    { identifier: "12344",
+      firstName: "Alice",
+      lastName: "Protocolo",
+      birthdate: new Date(1990,10,20),
+      gender: "Female",
+      job: "Detective",
+      studies: "Software Engineer",
+      office: "Málaga"
+    }
+  ];
 
   private userCases:Case[] = [
     { identifier:"CASE001",
@@ -25,8 +35,8 @@ export class HyperledgerService {
       /*resolution: "Testing",
       closureDate: new Date(),*/
       status:"OPENED",
-      openedBy:this.userProfile,
-      participants:[this.userProfile]
+      openedBy:this.userProfiles[0],
+      participants:[this.userProfiles[0], this.userProfiles[1]]
     }
   ];
 
@@ -46,44 +56,51 @@ export class HyperledgerService {
       hashType:"SHA-1",
       description:"Video recording",
       additionDate:new Date(2018,10,20),
-      owner:this.userProfile,
+      owner:this.userProfiles[0],
       olderOwners:this.owners,
       case:this.userCases[0]},
     { identifier:"EVD002",
       hash:"A156456156D4351545F6",
       hashType:"SHA-1",
       description:"Image",
-      additionDate:new Date(),
-      owner:this.userProfile,
+      additionDate:new Date(2018,10,21),
+      owner:this.userProfiles[0],
       olderOwners:this.owners,
       case:this.userCases[0]}
   ];
 
   constructor(private userdata: UserDataService) { }
 
-  //Retrieve any user profile
+  //Get any user profie from blockchain
   getProfile(identifier:string): Profile{
-    let profile: Profile = {
-      identifier: identifier,
-      firstName: "Bob",
-      lastName: "Protocolo",
-      birthdate: new Date(1990,10,20),
-      gender: "Male",
-      job: "Detective",
-      studies: "Software Engineer",
-      office: "Málaga"
+    for(let aux of this.userProfiles){
+      if(aux.identifier == identifier){
+        return aux;
+      }
     }
-    return profile;
+    return undefined;
   }
 
   //Get current user cases from blockchain and stores them in UserDataService
   getCases(){
-    this.userdata.setUserCases(this.userCases);
+    let cases:Case[] = [];
+    for(let caso of this.userCases){
+      if(caso.participants.includes(this.userdata.getUserProfile())){
+        cases.push(caso);
+      }
+    }
+    this.userdata.setUserCases(cases);
   }
 
   //Get current user evidences from blockchain and stores them in UserDataService
   getEvidences(){
-    this.userdata.setUserEvidences(this.userEvidences);
+    let evidences:Evidence[] = [];
+    for(let evidence of this.userEvidences){
+      if(evidence.owner.identifier == this.userdata.getUserProfile().identifier){
+        evidences.push(evidence);
+      }
+    }
+    this.userdata.setUserEvidences(evidences);
   }
 
   //Get evidences from case X
