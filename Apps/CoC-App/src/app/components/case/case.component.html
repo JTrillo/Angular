@@ -63,7 +63,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let evidence of evidences">
-                                <td>{{evidence.identifier}}</td>
+                                <td><a [routerLink]="['/evidence', evidence.identifier]">{{evidence.identifier}}</a></td>
                                 <td>{{evidence.description}}</td>
                                 <td>{{evidence.owner.identifier}}</td>
                             </tr>

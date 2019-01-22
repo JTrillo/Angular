@@ -58,9 +58,8 @@ export class CaseComponent implements OnInit {
     });
 
     //Disabling buttons
-    /*this.disabledUser = this.case.openedBy.identifier != this.currentUser.identifier;
-    this.disabledClosed = this.case.status == 'CLOSED';*/
-    this.disabledClosed = this.disabledUser = false;
+    this.disabledUser = this.case.openedBy.identifier != this.currentUser.identifier;
+    this.disabledClosed = this.case.status == 'CLOSED';
    }
 
   ngOnInit() {
@@ -76,7 +75,8 @@ export class CaseComponent implements OnInit {
       console.log(this.form.value);
       let check = confirm(`¿Está seguro de que desea cerrar el caso ${this.case.identifier}?`);
       if(check){
-        //LLAMADA A LA API REST PARA C
+        //CALL TO THE API REST TO CLOSE THE CASE
+        console.log("Closing case...")
       }
     }else{
       this.displayError=true;

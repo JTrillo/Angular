@@ -8,7 +8,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { CaseComponent } from './components/case/case.component';
 import { EvidenceComponent } from './components/evidence/evidence.component';
 
-import { LoggedGuard } from './services/guards.service';
+import { LoggedGuard, CaseGuard, EvidenceGuard } from './services/guards.service';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent,},
@@ -16,8 +16,8 @@ const routes: Routes = [
   { path: 'newcase', component: NewCaseComponent, canActivate: [LoggedGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [LoggedGuard] },
   { path: 'profile/:user_id', component: ProfileComponent, canActivate: [LoggedGuard] },
-  { path: 'case/:case_id', component: CaseComponent, canActivate: [LoggedGuard]},
-  { path: 'evidence/:evi_id', component: EvidenceComponent, canActivate: [LoggedGuard]},
+  { path: 'case/:case_id', component: CaseComponent, canActivate: [LoggedGuard, CaseGuard]},
+  { path: 'evidence/:evi_id', component: EvidenceComponent, canActivate: [LoggedGuard, EvidenceGuard]},
   { path: '**', pathMatch:'full', redirectTo: 'home' } //default route
 ];
 
