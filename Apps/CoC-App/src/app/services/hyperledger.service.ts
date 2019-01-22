@@ -11,7 +11,7 @@ export class HyperledgerService {
     identifier: "12345",
     firstName: "Bob",
     lastName: "Protocolo",
-    birthdate: new Date(1994,10,23),
+    birthdate: new Date(1990,10,20),
     gender: "Male",
     job: "Detective",
     studies: "Software Engineer",
@@ -21,21 +21,33 @@ export class HyperledgerService {
   private userCases:Case[] = [
     { identifier:"CASE001",
       description:"Grand Theft Auto",
-      openingDate: new Date(),
+      openingDate: new Date(2018,11,21),
+      /*resolution: "Testing",
+      closureDate: new Date(),*/
       status:"OPENED",
       openedBy:this.userProfile,
       participants:[this.userProfile]
     }
   ];
+
+  private owners:Owner[]=[
+    { owner: "11111",
+      until: new Date(2018,11,4)  
+    },
+    {
+      owner: "22222",
+      until: new Date(2018,11,21)
+    }
+  ]
   
   private userEvidences:Evidence[] = [
     { identifier:"EVD001",
       hash:"A156456156D4351545F6",
       hashType:"SHA-1",
       description:"Video recording",
-      additionDate:new Date(),
+      additionDate:new Date(2018,10,20),
       owner:this.userProfile,
-      olderOwners:[],
+      olderOwners:this.owners,
       case:this.userCases[0]},
     { identifier:"EVD002",
       hash:"A156456156D4351545F6",
@@ -43,7 +55,7 @@ export class HyperledgerService {
       description:"Image",
       additionDate:new Date(),
       owner:this.userProfile,
-      olderOwners:[],
+      olderOwners:this.owners,
       case:this.userCases[0]}
   ];
 
@@ -53,9 +65,9 @@ export class HyperledgerService {
   getProfile(identifier:string): Profile{
     let profile: Profile = {
       identifier: identifier,
-      firstName: "Joaquín",
-      lastName: "Trillo",
-      birthdate: new Date(1994,10,23),
+      firstName: "Bob",
+      lastName: "Protocolo",
+      birthdate: new Date(1990,10,20),
       gender: "Male",
       job: "Detective",
       studies: "Software Engineer",
@@ -115,5 +127,5 @@ export interface Evidence {
 
 interface Owner {
   owner:string,
-  till:Date
+  until:Date
 }

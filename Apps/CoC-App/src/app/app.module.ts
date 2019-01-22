@@ -11,6 +11,7 @@ import { NewCaseComponent } from './components/new-case/new-case.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { LoginComponent } from './components/login/login.component';
 import { CaseComponent } from './components/case/case.component';
+import { EvidenceComponent } from './components/evidence/evidence.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { CaseComponent } from './components/case/case.component';
     NewCaseComponent,
     ProfileComponent,
     LoginComponent,
-    CaseComponent
+    CaseComponent,
+    EvidenceComponent
   ],
   imports: [
     BrowserModule,

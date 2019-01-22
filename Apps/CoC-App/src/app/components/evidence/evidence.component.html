@@ -1,0 +1,65 @@
+<div>
+    <h1>Evidence {{evidence.identifier}} (case {{evidence.case.identifier}})</h1>
+    <hr>
+
+    <div class="form-group row">
+        <label class="col-md-1 col-form-label">Hash</label>
+        <div class="col-md-7">
+            <input type="text" class="form-control" [value]="evidence.hash + ' (' + evidence.hashType + ')'" disabled>
+        </div>
+
+        <label class="col-md-2 col-form-label">Creation Date</label>
+        <div class="col-md-2">
+            <input type="date" class="form-control" [value]="2018-10-24" disabled>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-md-1 col-form-label">Description</label>
+        <div class="col-md-11">
+            <textarea class="form-control" [value]="evidence.description" disabled></textarea>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <h2>Owners</h2>
+        <div class="table table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Owner id</th>
+                        <th>Since</th>
+                        <th>Until</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let owner of evidence.olderOwners; let i = index">
+                        <td>{{owner.owner}}</td>
+                        <td *ngIf="i==0">{{evidence.additionDate | date: 'dd/MM/yyyy'}}</td>
+                        <td *ngIf="i>0">{{evidence.olderOwners[i-1].until | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{owner.until | date: 'dd/MM/yyyy'}}</td>
+                    </tr>
+                    <tr>
+                        <th>{{evidence.owner.identifier}}</th>
+                        <th>{{evidence.olderOwners[evidence.olderOwners.length-1].until | date: 'dd/MM/yyyy'}}</th>
+                        <th>...</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2 offset-md-3">
+            <button type="button" class="btn btn-outline-primary btn-block" (click)="openModalTransfer()">Transfer evidence</button>
+        </div>
+
+        <div class="col-md-2">
+            <button type="button" class="btn btn-outline-primary btn-block" (click)="downloadCopy()">Download a copy</button>
+        </div>
+
+        <div class="col-md-2">
+            <button type="button" class="btn btn-outline-primary btn-block" (click)="goBack()">Go back</button>
+        </div>
+    </div>
+</div>

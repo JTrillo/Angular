@@ -32,6 +32,16 @@ export class UserDataService {
     return this.userCases;
   }
 
+  //Retrieves one case
+  getCase(id:string): Case{
+    for(let aux of this.userCases){
+      if(aux.identifier == id){
+        return aux;
+      }
+    }
+    return undefined;
+  }
+
   //When logging, to set user evidences
   setUserEvidences(userEvidences: Evidence[]){
     this.userEvidences = userEvidences;
@@ -40,5 +50,15 @@ export class UserDataService {
   //Retrieves the evidences of current user
   getUserEvidences(): Evidence[]{
     return this.userEvidences;
+  }
+
+  //Retrieves one evidence
+  getEvidence(id:string): Evidence{
+    for(let aux of this.userEvidences){
+      if(aux.identifier == id){
+        return aux;
+      }
+    }
+    return undefined;
   }
 }

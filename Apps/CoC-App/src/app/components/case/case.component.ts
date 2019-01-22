@@ -14,19 +14,25 @@ import { UserDataService } from 'src/app/services/user-data.service';
 export class CaseComponent implements OnInit {
 
   case:Case;
-  form:FormGroup;
   openingDate:string;
   closureDate:string;
-  evidences:Evidence[] = [];
+  today:string
   participants:Profile[] = [];
+  evidences:Evidence[] = [];
+  currentUser:Profile;
+  form:FormGroup;
+
+  disabledUser:boolean;
+  disabledClosed:boolean;
+
+  displayError:boolean=false;
 
   constructor(private location:Location,
               private hyperledger:HyperledgerService,
               private userdata:UserDataService) {
-    //FORM
-    this.form = new FormGroup({
-      'resolution': new FormControl('', Validators.required)
-    })
+    
+    this.today = this.dateToInputDate(new Date());
+
     //CASE - CHANGE IT
     this.hyperledger.getCases();
     this.case = this.userdata.getUserCases()[0];
@@ -34,11 +40,27 @@ export class CaseComponent implements OnInit {
     this.openingDate = this.dateToInputDate(this.case.openingDate);
     if(this.case.closureDate!=undefined){
       this.closureDate = this.dateToInputDate(this.case.closureDate);
+    }else{
+      //this.closureDate = this.today;
     }
     this.participants = this.case.participants;
 
     //EVIDENCES - CHANGE IT
     this.evidences = this.hyperledger.getCaseEvidences(this.case.identifier);
+
+    //CURRENT USER
+    this.currentUser = this.userdata.getUserProfile();
+
+    //FORM
+    this.form = new FormGroup({
+      'closureDate': new FormControl({value:'', disabled: this.case.status == 'CLOSED'}, Validators.required),
+      'resolution': new FormControl({value:this.case.resolution, disabled: this.case.status == 'CLOSED'}, Validators.required)
+    });
+
+    //Disabling buttons
+    /*this.disabledUser = this.case.openedBy.identifier != this.currentUser.identifier;
+    this.disabledClosed = this.case.status == 'CLOSED';*/
+    this.disabledClosed = this.disabledUser = false;
    }
 
   ngOnInit() {
@@ -49,7 +71,17 @@ export class CaseComponent implements OnInit {
   }
 
   closeCase(){
-    console.log(this.form.value);
+    if(this.form.valid){
+      this.displayError=false;
+      console.log(this.form.value);
+      let check = confirm(`¿Está seguro de que desea cerrar el caso ${this.case.identifier}?`);
+      if(check){
+        //LLAMADA A LA API REST PARA C
+      }
+    }else{
+      this.displayError=true;
+      console.error('Form not valid!!')
+    }
   }
 
   addParticipant(){
