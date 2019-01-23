@@ -4,12 +4,12 @@
 
     <div class="form-group row">
         <label class="col-md-1 col-form-label">Hash</label>
-        <div class="col-md-7">
+        <div class="col-md-6">
             <input type="text" class="form-control" [value]="evidence.hash + ' (' + evidence.hashType + ')'" disabled>
         </div>
 
         <label class="col-md-2 col-form-label">Addition Date</label>
-        <div class="col-md-2">
+        <div class="col-md-3">
             <input type="date" class="form-control" [value]="additionDate" disabled>
         </div>
     </div>
@@ -51,7 +51,35 @@
 
     <div class="form-group row">
         <div class="col-md-2 offset-md-3">
-            <button type="button" class="btn btn-outline-primary btn-block" (click)="openModalTransfer()">Transfer evidence</button>
+            <button type="button" class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#transferModal">Transfer evidence</button>
+
+            <!-- Transfer evidence modal -->
+            <div class="modal fade" id="transferModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header">
+                            <h5>Transfer evidence {{evidence.identifier}}</h5>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <!-- Body -->
+                        <div class="modal-body">
+                            <ul class="list-group">
+                                <li class="list-group-item list-group-item-action" *ngFor="let participant of participants">
+                                    {{participant.lastName}}, {{participant.firstName}} ({{participant.identifier}})
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-primary" (click)="transferEvidence()">Transfer</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
 
         <div class="col-md-2">
@@ -62,4 +90,6 @@
             <button type="button" class="btn btn-outline-primary btn-block" (click)="goBack()">Go back</button>
         </div>
     </div>
+
+
 </div>

@@ -25,6 +25,15 @@ export class HyperledgerService {
       job: "Detective",
       studies: "Software Engineer",
       office: "Málaga"
+    },
+    { identifier: "12346",
+      firstName: "Clark",
+      lastName: "Firewall",
+      birthdate: new Date(1994,4,25),
+      gender: "Male",
+      job: "Officer",
+      studies: "Software Engineer",
+      office: "Málaga"
     }
   ];
 
@@ -36,7 +45,7 @@ export class HyperledgerService {
       closureDate: new Date(),*/
       status:"OPENED",
       openedBy:this.userProfiles[0],
-      participants:[this.userProfiles[0], this.userProfiles[1]]
+      participants:[this.userProfiles[0], this.userProfiles[1], this.userProfiles[2]]
     }
   ];
 
@@ -52,7 +61,7 @@ export class HyperledgerService {
   
   private userEvidences:Evidence[] = [
     { identifier:"EVD001",
-      hash:"A156456156D4351545F6",
+      hash:"cf23df2207d99a74fbe169e3eba035e633b65d94",
       hashType:"SHA-1",
       description:"Video recording",
       additionDate:new Date(2018,10,20),
@@ -60,7 +69,7 @@ export class HyperledgerService {
       olderOwners:this.owners,
       case:this.userCases[0]},
     { identifier:"EVD002",
-      hash:"A156456156D4351545F6",
+      hash:"cf23df2207d99a74fbe169e3eba035e633b65d94",
       hashType:"SHA-1",
       description:"Image",
       additionDate:new Date(2018,10,21),
