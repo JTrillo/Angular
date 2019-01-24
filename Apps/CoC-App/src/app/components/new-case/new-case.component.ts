@@ -22,5 +22,7 @@ export class NewCaseComponent implements OnInit {
   
   addCase(){
     console.log( this.form.value );
+    //TO DO --> Llamar a la transacción del chaincode 'OpenCase'
+    //TO DO --> Recuperar los nuevos casos y pruebas del usuario
   }
 }

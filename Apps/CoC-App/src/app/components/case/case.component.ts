@@ -29,7 +29,8 @@ export class CaseComponent implements OnInit {
 
   constructor(private location:Location,
               private hyperledger:HyperledgerService,
-              private userdata:UserDataService) {
+              private userdata:UserDataService,
+              private router:Router) {
     
     this.today = this.dateToInputDate(new Date());
 
@@ -67,6 +68,7 @@ export class CaseComponent implements OnInit {
 
   addEvidence(){
     console.log("add evidence click");
+    //TO DO --> Ir a la vista de creación de nueva evidencia
   }
 
   closeCase(){
@@ -75,17 +77,22 @@ export class CaseComponent implements OnInit {
       console.log(this.form.value);
       let check = confirm(`¿Está seguro de que desea cerrar el caso ${this.case.identifier}?`);
       if(check){
-        //CALL TO THE API REST TO CLOSE THE CASE
-        console.log("Closing case...")
+        console.log("Closing case...");
+        //TO DO --> Llamar a la transacción del chaincode 'CloseCase'
+        //TO DO --> Recuperar los nuevos casos y pruebas del usuario
+        this.router.navigate(['/home']);
       }
     }else{
       this.displayError=true;
-      console.error('Form not valid!!')
+      console.error('Form not valid!!');
     }
   }
 
   addParticipant(){
     console.log("add participant click");
+    //TO DO --> Llamar a la transacción del chaincode 'AddParticipant'
+    //TO DO --> Recuperar los nuevos casos y pruebas del usuario
+    this.router.navigate(['/case',this.case.identifier]);
   }
 
   goBack(){

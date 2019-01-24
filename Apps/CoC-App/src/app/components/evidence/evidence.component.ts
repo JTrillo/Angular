@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit} from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { UserDataService } from 'src/app/services/user-data.service';
@@ -18,26 +18,45 @@ export class EvidenceComponent implements OnInit {
   additionDate:string;
 
   participants:Profile[] = []; //Participants in case that no are the current user
-
-  @ViewChild('closeModal') private closeModal: ElementRef;
+  participant_id:string; //Id of participant who is going to receive the evidence
+  noSelected:boolean;
 
   constructor(private activatedroute:ActivatedRoute,
               private userdata:UserDataService,
-              private location:Location) {
+              private location:Location,
+              private router:Router) {
     this.activatedroute.params.subscribe(params => {
       let evidence_id = params['evi_id'];
       this.evidence = this.userdata.getEvidence(evidence_id);
       this.additionDate = this.dateToInputDate(this.evidence.additionDate);
       this.participants = this.removeCurrentUser(this.evidence.case.participants);
     });
+    this.participant_id = undefined;
+    this.noSelected = false;
   }
 
   ngOnInit() {
   }
 
+  participantSelected(participant_id:string){
+    this.participant_id = participant_id;
+  }
+
+  cleanSelected(){
+    this.participant_id = undefined;
+    this.noSelected = false;
+  }
+
   transferEvidence(){
-    console.log("transferEvidence pressed");
-    jQuery('#transferModal').modal('hide');
+    if(this.participant_id!=undefined){
+      console.log(`Transfer evidence to: ${this.participant_id}`);
+      //TO DO --> Llamar a la transacción del chaincode 'TransferEvidence'
+      //TO DO --> Recuperar los nuevos casos y pruebas del usuario
+      jQuery('#transferModal').modal('hide');
+      this.router.navigate(['/home']);
+    }else{
+      this.noSelected = true;
+    }
   }
 
   downloadCopy(){
