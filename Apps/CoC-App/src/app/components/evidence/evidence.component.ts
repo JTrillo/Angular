@@ -74,14 +74,14 @@ export class EvidenceComponent implements OnInit {
   }
 
   private removeCurrentUser(participants:Profile[]): Profile[]{
+    let withoutCurrentUser:Profile[] = [];
     let user_id = this.userdata.getUserProfile().identifier;
     for(let aux = 0; aux<participants.length; aux++){
-      if(user_id == participants[aux].identifier){
-        participants.splice(aux, 1);
-        return participants;
+      if(user_id != participants[aux].identifier){
+        withoutCurrentUser.push(participants[aux]);
       }
     }
-    return participants;
+    return withoutCurrentUser;
   }
 
 }
