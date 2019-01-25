@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import { Location } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { HyperledgerService, Case, Evidence, Profile } from 'src/app/services/hyperledger.service';
 import { UserDataService } from 'src/app/services/user-data.service';
@@ -34,7 +34,8 @@ export class CaseComponent implements OnInit {
   newParticipantDisplay:string=undefined;
   switchControl:number=0;
 
-  constructor(private location:Location,
+  constructor(private activatedRoute:ActivatedRoute,
+              private location:Location,
               private hyperledger:HyperledgerService,
               private userdata:UserDataService,
               private router:Router) {
@@ -42,7 +43,11 @@ export class CaseComponent implements OnInit {
     this.today = this.dateToInputDate(new Date());
 
     //CASE
-    this.case = this.userdata.getUserCases()[0];
+    this.activatedRoute.params.subscribe( params => {
+      let case_id = params['case_id'];
+      this.case = this.userdata.getCase(case_id);
+    });
+    //this.case = this.userdata.getUserCases()[0];
     
     this.openingDate = this.dateToInputDate(this.case.openingDate);
     if(this.case.closureDate!=undefined){
