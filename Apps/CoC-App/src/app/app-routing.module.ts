@@ -17,13 +17,7 @@ const routes: Routes = [
   { path: 'newcase', component: NewCaseComponent, canActivate: [LoggedGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [LoggedGuard] },
   { path: 'profile/:user_id', component: ProfileComponent, canActivate: [LoggedGuard] },
-  { path: 'case/:case_id',
-    component: CaseComponent,
-    canActivate: [LoggedGuard, CaseGuard],
-    /*children: [
-      { path: 'newevidence', component: NewEvidenceComponent}
-    ]*/
-  },
+  { path: 'case/:case_id', component: CaseComponent, canActivate: [LoggedGuard, CaseGuard] },
   { path: 'case/:case_id/newevidence', component: NewEvidenceComponent, canActivate: [LoggedGuard, CaseGuard]},
   { path: 'evidence/:evi_id', component: EvidenceComponent, canActivate: [LoggedGuard, EvidenceGuard]},
   { path: '**', pathMatch:'full', redirectTo: 'home' } //default route

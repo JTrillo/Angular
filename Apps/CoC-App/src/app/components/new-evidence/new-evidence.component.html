@@ -1,1 +1,53 @@
-<h1>New evidence for case {{case_id}}</h1>
+<form [formGroup]="form" (ngSubmit)="addEvidence()">
+    <div>
+        <h1>New evidence for case {{case_id}}</h1>
+        <hr><br>
+
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label">Evidence ID</label>
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Enter identifier" formControlName="identifier">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label">Hash Type</label>
+            <div class="col-md-4">
+                <select class="form-control" formControlName="hash_type">
+                    <option disabled selected value> -- Select one -- </option>
+                    <option value="1">MD5</option>
+                    <option value="2">SHA-1</option>
+                    <option value="3">SHA-256</option>
+                </select>
+            </div>
+
+            <label class="col-md-2 col-form-label">Hash Value</label>
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Enter hash value" formControlName="hash_value">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label">Description</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="3" placeholder="Enter description" formControlName="description"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-3 offset-md-3">
+                <button type="submit" class="btn btn-outline-primary btn-block" [disabled]="form.invalid">Add evidence</button>
+            </div>
+
+            <div class="col-md-3">
+                <button type="button" class="btn btn-outline-primary btn-block" (click)="goBack()">Go back</button>
+            </div>
+        </div>
+
+        <div class="form-group row" [hidden]="form.valid">
+            <div class="alert alert-warning col-md-12" role="alert">
+                All fields must be filled
+            </div>
+        </div>
+    </div>
+</form>
