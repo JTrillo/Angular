@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "AIzaSyCgLCYPHPXQSp9KCksBlVhW6CCwNaux5CY",
+    apiKey: "AIzaSyCiWEzIdCJsxWKptEKyA6ARuxJnrhK3yuo",
     authDomain: "hyperledger-jte.firebaseapp.com",
     databaseURL: "https://hyperledger-jte.firebaseio.com",
     projectId: "hyperledger-jte",
