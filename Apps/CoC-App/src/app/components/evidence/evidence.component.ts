@@ -1,9 +1,12 @@
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { Observable } from 'rxjs';
 
 import { UserDataService } from 'src/app/services/user-data.service';
 import { Evidence, Profile } from 'src/app/services/hyperledger.service';
+
+import { AngularFireStorage } from '@angular/fire/storage';
 
 declare var jQuery:any; //To import jQuery
 
@@ -21,10 +24,13 @@ export class EvidenceComponent implements OnInit {
   participant_id:string; //Id of participant who is going to receive the evidence
   noSelected:boolean;
 
+  downloadUrl: Observable<string | null>;
+
   constructor(private activatedroute:ActivatedRoute,
               private userdata:UserDataService,
               private location:Location,
-              private router:Router) {
+              private router:Router,
+              private storage:AngularFireStorage) {
     this.activatedroute.params.subscribe(params => {
       let evidence_id = params['evi_id'];
       this.evidence = this.userdata.getEvidence(evidence_id);
@@ -61,6 +67,9 @@ export class EvidenceComponent implements OnInit {
 
   downloadCopy(){
     console.log("downloadCopy pressed");
+    const path = `${this.evidence.case.identifier}/${this.evidence.identifier}`;
+    const ref = this.storage.ref(path);
+    this.downloadUrl = ref.getDownloadURL();
   }
 
   goBack(){

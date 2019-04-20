@@ -100,5 +100,9 @@
         </div>
     </div>
 
-
+    <div *ngIf="downloadUrl | async as url">
+        <div class="alert alert-success col-md-12" role="alert">
+            <b>{{url}}</b>
+        </div>
+    </div>
 </div>

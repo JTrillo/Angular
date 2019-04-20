@@ -14,6 +14,11 @@ import { CaseComponent } from './components/case/case.component';
 import { EvidenceComponent } from './components/evidence/evidence.component';
 import { NewEvidenceComponent } from './components/new-evidence/new-evidence.component';
 
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { environment } from '../environments/environment';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +36,10 @@ import { NewEvidenceComponent } from './components/new-evidence/new-evidence.com
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireStorageModule
   ],
   providers: [],
   bootstrap: [AppComponent]
