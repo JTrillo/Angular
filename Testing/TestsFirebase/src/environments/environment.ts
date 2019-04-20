@@ -5,12 +5,12 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "AIzaSyCgLCYPHPXQSp9KCksBlVhW6CCwNaux5CY",
-    authDomain: "hyperledger-jte.firebaseapp.com",
-    databaseURL: "https://hyperledger-jte.firebaseio.com",
-    projectId: "hyperledger-jte",
-    storageBucket: "hyperledger-jte.appspot.com",
-    messagingSenderId: "931942805908"
+    apiKey: "COMPLETE",
+    authDomain: "COMPLETE",
+    databaseURL: "COMPLETE",
+    projectId: "COMPLETE",
+    storageBucket: "COMPLETE",
+    messagingSenderId: "COMPLETE"
   }
 };
 
