@@ -26,16 +26,20 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  login(){
+  signin(){
     console.log(this.form.value);
     let identifier = this.form.value.identifier;
     let password = this.form.value.password;
-    let success:boolean = this.auth.login(identifier);
+    let success:boolean = this.auth.login(identifier, password);
     if(success){
       this.router.navigate(['/home']);
     }else{
       this.failUserId = identifier;
       this.showFail = true;
     }
+  }
+
+  signup(){
+    this.router.navigate(['/signup']);
   }
 }

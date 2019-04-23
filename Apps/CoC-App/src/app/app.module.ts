@@ -13,11 +13,13 @@ import { LoginComponent } from './components/login/login.component';
 import { CaseComponent } from './components/case/case.component';
 import { EvidenceComponent } from './components/evidence/evidence.component';
 import { NewEvidenceComponent } from './components/new-evidence/new-evidence.component';
+import { SignupComponent } from './components/signup/signup.component';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { environment } from '../environments/environment';
+
 
 @NgModule({
   declarations: [
@@ -30,16 +32,17 @@ import { environment } from '../environments/environment';
     LoginComponent,
     CaseComponent,
     EvidenceComponent,
-    NewEvidenceComponent
+    NewEvidenceComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
-    AngularFireStorageModule
+    AngularFireModule.initializeApp(environment.firebase), //necesary for any module
+    AngularFirestoreModule, //only needed for database module
+    AngularFireStorageModule //only needed for storage module
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,68 @@
+<form [formGroup]="form" (ngSubmit)="sendRequest()">
+
+    <div class="col-md-8 offset-md-2">
+        <h1>Chain of Custody for Digital Evidences</h1>
+        <hr>
+        <div class="alert alert-light" role="alert">
+            <strong>If you want to participate in the Chain of Custody system, please fill this form. As soon as possible, it will be checked by an administrator and you will receive an e-mail with your credentials.</strong>
+        </div>
+    </div>
+
+    <div class="col-md-6 offset-md-3 loginDiv">
+        <div class="form-group row" style="margin-top:2%;">
+            <label class="col-md-3 col-form-label">Full name</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" placeholder="Peter Dun" formControlName="fullname">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label">Birthdate</label>
+            <div class="col-md-9">
+                <input type="date" class="form-control" formControlName="birthdate">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label">Gender</label>
+            <div class="col-md-9">
+                <select class="form-control" formControlName="gender">
+                    <option disabled selected value> -- Select one -- </option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label">Job</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" placeholder="Officer" formControlName="job">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label">Studies</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" placeholder="Software Engineer" formControlName="studies">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label">Office</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" placeholder="Malaga" formControlName="office">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-4 offset-md-2">
+                <button type="submit" class="btn btn-outline-primary btn-block" [disabled]="form.invalid">Send</button>
+            </div>
+
+            <div class="col-md-4">
+                <button type="button" class="btn btn-outline-primary btn-block" (click)="signin()">Sign In</button>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,32 +1,44 @@
 import { Injectable } from '@angular/core';
 
-import { HyperledgerService, Profile, Case, Evidence } from './hyperledger.service';
+import { HyperledgerService, Profile} from './hyperledger.service';
 import { UserDataService } from './user-data.service';
 
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+  private profile:Profile;
   private expirationTime:number;
 
   constructor(private hyperledger:HyperledgerService,
-              private userdata:UserDataService) {
+              private userdata:UserDataService,
+              private firestore:AngularFirestore) {
+    this.profile = undefined;
     this.expirationTime = 0;
   }
 
-  public login(id:string): boolean{
+  public login(id:string, pass:string): boolean{
+    //SEGUIR AQUI. METER LA VERIFICACION DE FIREBASE.
     //Looking for the user
-    let profile:Profile = this.hyperledger.getProfile(id);
-    if(profile!=undefined){ //If the user exists
+    this.profile = this.hyperledger.getProfile(id);
+    if(this.profile!=undefined){ //If the user exists
       this.expirationTime = Date.now() + 1800000; //30 min token
-      this.userdata.setUserProfile(profile); //Set user profile
+      this.userdata.setUserProfile(this.profile); //Set user profile
       this.hyperledger.getCases();
       this.hyperledger.getEvidences();
       return true;
     }else{
       return false;
     }
+  }
+
+  public login2(id:string, pass:string){
+    this.firestore.collection('users').doc(id).get().subscribe(user=>{
+      console.log(user.data()['pass']);
+    });
+
   }
 
   public logout(): void{
