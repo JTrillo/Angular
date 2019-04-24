@@ -3,6 +3,8 @@ import { FormGroup, FormControl, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 
+import { AngularFirestore } from '@angular/fire/firestore';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -11,32 +13,46 @@ import { AuthService } from 'src/app/services/auth.service';
 export class LoginComponent implements OnInit {
 
   form:FormGroup;
-  failUserId:string;
-  showFail:boolean
+  showFail:boolean;
+  showFailMsg:string;
 
   constructor(private router:Router,
-              private auth:AuthService) {
+              private auth:AuthService,
+              private db:AngularFirestore) {
     this.form = new FormGroup({
       'identifier': new FormControl('', Validators.required),
       'password': new FormControl('', Validators.required)
     });
     this.showFail = false;
+    this.showFailMsg = "";
   }
 
   ngOnInit() {
   }
 
   signin(){
-    console.log(this.form.value);
+    //console.log(this.form.value);
     let identifier = this.form.value.identifier;
     let password = this.form.value.password;
-    let success:boolean = this.auth.login(identifier, password);
-    if(success){
-      this.router.navigate(['/home']);
-    }else{
-      this.failUserId = identifier;
-      this.showFail = true;
-    }
+
+    //1. Check if user exists (verify collection in Firestore) and check if user-pass combination is correct
+    this.db.collection('users').doc(identifier).get().subscribe(user=>{
+      if(user.data()==undefined){
+        this.showFail=true;
+        this.showFailMsg = `User ${identifier} does not exist`;
+      }else if(user.data()['pass']!==password){
+        this.showFail=true;
+        this.showFailMsg = `Password for user ${identifier} is not valid`;
+      }else{
+        let success:boolean = this.auth.login(identifier);
+        if(success){
+          this.router.navigate(['/home']);
+        }else{
+          this.showFail = true;
+          this.showFailMsg = `Error when communicating with blockchain. Please try again`;
+        }
+      }
+    });
   }
 
   signup(){

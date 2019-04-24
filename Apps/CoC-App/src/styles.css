@@ -5,7 +5,9 @@
     padding-bottom: 60px;
 }
 
-.loginDiv {
+.loginDiv,
+.signupDiv,
+.profileDiv {
     border: 2px solid grey;
     border-radius: 5px;
 }

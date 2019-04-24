@@ -16,7 +16,8 @@ export class SignupComponent implements OnInit {
   constructor(private router:Router,
               private db:AngularFirestore) {
     this.form = new FormGroup({
-      'fullname': new FormControl('', Validators.required),
+      'firstname': new FormControl('', Validators.required),
+      'lastname': new FormControl('', Validators.required),
       'birthdate': new FormControl('', Validators.required),
       'gender': new FormControl('', Validators.required),
       'job': new FormControl('', Validators.required),
@@ -30,7 +31,8 @@ export class SignupComponent implements OnInit {
 
   sendRequest(){
     this.db.collection("new_users").add({
-      fullname: this.form.value.fullname,
+      firstname: this.form.value.firstname,
+      lasttname: this.form.value.lastname,
       birthdate: this.form.value.birthdate,
       gender: this.form.value.gender,
       job: this.form.value.job,
