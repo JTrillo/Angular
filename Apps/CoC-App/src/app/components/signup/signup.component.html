@@ -42,9 +42,14 @@
         </div>
 
         <div class="form-group row">
-            <label class="col-md-3 col-form-label">Job</label>
+            <label class="col-md-3 col-form-label">Job Position</label>
             <div class="col-md-9">
-                <input type="text" class="form-control" placeholder="Officer" formControlName="job">
+                <select class="form-control" formControlName="job">
+                    <option disabled select value> -- Select one -- </option>
+                    <option value="DETECTIVE">Detective</option>
+                    <option value="OFFICER">Officer</option>
+                    <option value="FORENSICS_TECHNICIAN">Forensics Technician</option>
+                </select>
             </div>
         </div>
 

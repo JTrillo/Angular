@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { HyperledgerService, Profile} from './hyperledger.service';
 import { UserDataService } from './user-data.service';
@@ -11,22 +12,45 @@ export class AuthService {
   private expirationTime:number;
 
   constructor(private hyperledger:HyperledgerService,
-              private userdata:UserDataService) {
+              private userdata:UserDataService,
+              private router:Router) {
     this.expirationTime = 0;
   }
 
-  public login(id:string): boolean{
+  public login(id:string){
     //Looking for the user
-    let profile:Profile = this.hyperledger.getProfile(id);
-    if(profile!=undefined){ //If the user exists
+    this.hyperledger.getProfile(id).subscribe(response => {
+      let profile:Profile = {
+        identifier: response['participantId'],
+        firstName: response['firstName'],
+        lastName: response['lastName'],
+        birthdate: response['birthdate'],
+        gender: response['gender'],
+        job: response['job'],
+        studies: response['studies'],
+        office: response['office']
+      };
+      console.log(profile);
       this.expirationTime = Date.now() + 1800000; //30 min token
       this.userdata.setUserProfile(profile); //Set user profile
-      this.hyperledger.getCases();
-      this.hyperledger.getEvidences();
-      return true;
-    }else{
-      return false;
-    }
+      //Get user cases
+      this.hyperledger.getUserCases(id).subscribe(response2 => {
+        console.log(response2);
+        this.userdata.setUserCases([]);
+
+        //Get user evidences
+        this.hyperledger.getUserEvidences(id).subscribe(response3 => {
+          console.log(response3);
+          this.userdata.setUserEvidences([]);
+
+          //Navigate to home
+          this.router.navigate(['/home']);
+        });
+      });
+    }, error => {
+      console.log(error);
+    });
+    
   }
 
   public logout(): void{

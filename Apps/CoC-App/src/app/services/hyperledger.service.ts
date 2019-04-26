@@ -1,120 +1,64 @@
 import { Injectable } from '@angular/core';
 import { UserDataService } from './user-data.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+const API_ENDPOINT='http://104.199.105.69:3000/api/';
+const NETWORK_NAMESPACE = 'uma.coc.network.';
+const HTTP_OPTIONS_GET = {
+  headers: new HttpHeaders({
+    'x-api-key': '1234567890'
+  })
+};
+const HTTP_OPTIONS_POST = {
+  headers: new HttpHeaders({
+    'Content-Type':  'application/json',
+    'x-api-key': '1234567890'
+  })
+}
 @Injectable({
   providedIn: 'root'
 })
 export class HyperledgerService {
 
-  //THOSE VARIABLES MUST NOT BE INITIALIZED HERE
-  private userProfiles:Profile[] = [
-    { identifier: "12345",
-      firstName: "Bob",
-      lastName: "Protocolo",
-      birthdate: new Date(1990,10,20),
-      gender: "Male",
-      job: "Detective",
-      studies: "Software Engineer",
-      office: "Málaga"
-    },
-    { identifier: "12344",
-      firstName: "Alice",
-      lastName: "Protocolo",
-      birthdate: new Date(1990,10,20),
-      gender: "Female",
-      job: "Detective",
-      studies: "Software Engineer",
-      office: "Málaga"
-    },
-    { identifier: "12346",
-      firstName: "Clark",
-      lastName: "Firewall",
-      birthdate: new Date(1994,4,25),
-      gender: "Male",
-      job: "Officer",
-      studies: "Software Engineer",
-      office: "Málaga"
-    }
-  ];
-
-  private userCases:Case[] = [
-    { identifier:"CASE001",
-      description:"Grand Theft Auto",
-      openingDate: new Date(2018,11,21),
-      /*resolution: "Testing",
-      closureDate: new Date(),*/
-      status:"OPENED",
-      openedBy:this.userProfiles[0],
-      participants:[this.userProfiles[0], this.userProfiles[1], this.userProfiles[2]]
-    }
-  ];
-
-  private owners:Owner[]=[
-    { owner: "11111",
-      until: new Date(2018,11,4)  
-    },
-    {
-      owner: "22222",
-      until: new Date(2018,11,21)
-    }
-  ]
-  
-  private userEvidences:Evidence[] = [
-    { identifier:"EVD001",
-      hash:"cf23df2207d99a74fbe169e3eba035e633b65d94",
-      hashType:"SHA-1",
-      description:"Video recording",
-      additionDate:new Date(2018,10,20),
-      owner:this.userProfiles[0],
-      olderOwners:this.owners,
-      case:this.userCases[0]},
-    { identifier:"EVD002",
-      hash:"cf23df2207d99a74fbe169e3eba035e633b65d94",
-      hashType:"SHA-1",
-      description:"Image",
-      additionDate:new Date(2018,10,21),
-      owner:this.userProfiles[0],
-      olderOwners:this.owners,
-      case:this.userCases[0]}
-  ];
-
-  constructor(private userdata: UserDataService) { }
+  constructor(private userdata: UserDataService,
+              private http: HttpClient) { }
 
   //Get any user profie from blockchain
-  getProfile(identifier:string): Profile{
-    for(let aux of this.userProfiles){
-      if(aux.identifier == identifier){
-        return aux;
-      }
-    }
-    return undefined;
+  getProfile(identifier:string) {
+    let resource_url = `${API_ENDPOINT}${NETWORK_NAMESPACE}Agent/${identifier}`;
+    return this.http.get(resource_url, HTTP_OPTIONS_GET);
   }
 
   //Get current user cases from blockchain and stores them in UserDataService
-  getCases(){
-    let cases:Case[] = [];
-    for(let caso of this.userCases){
-      if(caso.participants.includes(this.userdata.getUserProfile())){
-        cases.push(caso);
-      }
-    }
-    this.userdata.setUserCases(cases);
+  getUserCases(identifier:string){
+    let participant_fqi = `${NETWORK_NAMESPACE}Agent#${identifier}`
+    let resource_url = `${API_ENDPOINT}queries/CasesByParticipant?participant_fqi=${participant_fqi}`
+    return this.http.get(resource_url, HTTP_OPTIONS_GET);
   }
 
   //Get current user evidences from blockchain and stores them in UserDataService
-  getEvidences(){
-    let evidences:Evidence[] = [];
-    for(let evidence of this.userEvidences){
-      if(evidence.owner.identifier == this.userdata.getUserProfile().identifier){
-        evidences.push(evidence);
-      }
-    }
-    this.userdata.setUserEvidences(evidences);
+  getUserEvidences(identifier:string){
+    let owner_fqi = `${NETWORK_NAMESPACE}Agent#${identifier}`
+    let resource_url = `${API_ENDPOINT}queries/EvidencesByParticipant?owner_fqi=${owner_fqi}`
+    return this.http.get(resource_url, HTTP_OPTIONS_GET);
   }
 
   //Get evidences from case X
-  getCaseEvidences(case_id:string):Evidence[]{
-    return this.userEvidences;
+  getCaseEvidences(case_id:string){
+    let case_fqi = `${NETWORK_NAMESPACE}Case#${case_id}`
+    let resource_url = `${API_ENDPOINT}queries/EvidencesByCase?case_fqi=${case_fqi}`
+    return this.http.get(resource_url, HTTP_OPTIONS_GET);
+  }
+
+  //Create a new case
+  postNewCase(case_id:string, description:string){
+    let data = {
+      id: case_id,
+      description: description
+    };
+    let resource_url = `${API_ENDPOINT}${NETWORK_NAMESPACE}OpenCase`;
+    return this.http.post(resource_url, data, HTTP_OPTIONS_POST);
+
   }
 }
 

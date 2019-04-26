@@ -44,13 +44,13 @@ export class LoginComponent implements OnInit {
         this.showFail=true;
         this.showFailMsg = `Password for user ${identifier} is not valid`;
       }else{
-        let success:boolean = this.auth.login(identifier);
-        if(success){
+        this.auth.login(identifier);
+        /*if(success){
           this.router.navigate(['/home']);
         }else{
           this.showFail = true;
           this.showFailMsg = `Error when communicating with blockchain. Please try again`;
-        }
+        }*/
       }
     });
   }
