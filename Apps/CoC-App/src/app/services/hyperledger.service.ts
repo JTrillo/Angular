@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { UserDataService } from './user-data.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-const API_ENDPOINT='http://104.199.105.69:3000/api/';
+const API_ENDPOINT='http://34.76.28.34:3000/api/';
 const NETWORK_NAMESPACE = 'uma.coc.network.';
 const HTTP_OPTIONS_GET = {
   headers: new HttpHeaders({

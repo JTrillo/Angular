@@ -24,13 +24,13 @@ export class AuthService {
         identifier: response['participantId'],
         firstName: response['firstName'],
         lastName: response['lastName'],
-        birthdate: response['birthdate'],
+        birthdate: new Date(response['birthdate']),
         gender: response['gender'],
         job: response['job'],
         studies: response['studies'],
         office: response['office']
       };
-      console.log(profile);
+      //console.log(profile);
       this.expirationTime = Date.now() + 1800000; //30 min token
       this.userdata.setUserProfile(profile); //Set user profile
       //Get user cases

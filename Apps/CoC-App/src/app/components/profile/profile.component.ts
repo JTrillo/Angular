@@ -34,14 +34,26 @@ export class ProfileComponent implements OnInit {
     
     this.activatedRoute.params.subscribe ( params => {
       if(params['user_id']!=undefined){
-        this.profile = this.hyperledger.getProfile(params['user_id']);
+        this.hyperledger.getProfile(params['user_id']).subscribe(response =>{
+          this.profile = {
+            identifier: response['participantId'],
+            firstName: response['firstName'],
+            lastName: response['lastName'],
+            birthdate: new Date(response['birthdate']),
+            gender: response['gender'],
+            job: response['job'],
+            studies: response['studies'],
+            office: response['office']
+          };
+          this.birthdate_display = `${this.profile.birthdate.getFullYear()}-${this.profile.birthdate.getMonth()+1}-${this.profile.birthdate.getDate()}`;
+        });
         this.other_profile = true;
       }else{
         this.profile = this.userdata.getUserProfile();
+        this.birthdate_display = `${this.profile.birthdate.getFullYear()}-${this.profile.birthdate.getMonth()+1}-${this.profile.birthdate.getDate()}`;
       }
     });
-    this.birthdate_display = `${this.profile.birthdate.getFullYear()}-${this.profile.birthdate.getMonth()+1}-${this.profile.birthdate.getDate()}`;
-
+    
     //FORM - CHANGE PASSWORD
     this.form = new FormGroup({
       'cur_pass': new FormControl('', Validators.required),

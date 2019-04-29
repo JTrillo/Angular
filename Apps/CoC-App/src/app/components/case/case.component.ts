@@ -58,7 +58,10 @@ export class CaseComponent implements OnInit {
     this.participants = this.case.participants;
 
     //EVIDENCES - CHANGE IT
-    this.evidences = this.hyperledger.getCaseEvidences(this.case.identifier);
+    this.hyperledger.getCaseEvidences(this.case.identifier).subscribe(response =>{
+      console.log(response);
+      this.evidences = []; //CAMBIAR;
+    });
 
     //CURRENT USER
     this.currentUser = this.userdata.getUserProfile();
@@ -107,18 +110,21 @@ export class CaseComponent implements OnInit {
 
     //Get id entered
     this.newParticipantId = this.form.value['newParticipantId'];
-    //Search participant in the blockchain
-    let profile:Profile = this.hyperledger.getProfile(this.newParticipantId);
 
-    if(profile==undefined){ //Show an error
-      this.switchControl = 1;
-    }else{
-      if(this.isAlreadyInvolved(this.newParticipantId)){ //Show a warning
-        this.switchControl = 2;
-      }else{ //Show info
+    //If user already participates in case, it is not needed to include him/her
+    if(this.isAlreadyInvolved(this.newParticipantId)){ //Show a warning
+      this.switchControl = 2;
+    }else{ //Search participant in the blockchain
+      this.hyperledger.getProfile(this.newParticipantId).subscribe(response =>{
+        //User exists in system
+        console.log(response);
         this.switchControl = 3;
-        this.newParticipantDisplay = `${profile.lastName}, ${profile.firstName} (${profile.identifier})`;
-      }
+        this.newParticipantDisplay = `${response['lastName']}, ${response['firstName']} (${response['participantId']})`;
+      }, error => {
+        //User does not exist in system
+        console.log(error);
+        this.switchControl = 1; //Show an error
+      });
     }
   }
 
@@ -129,8 +135,7 @@ export class CaseComponent implements OnInit {
 
   addParticipant(){
     console.log(`Adding participant ${this.newParticipantId} to case ${this.case.identifier}`);
-    this.newParticipantId = undefined;
-    this.switchControl = 0;
+    this.cleanSelected();
     //TO DO --> Llamar a la transacción del chaincode 'AddParticipant'
     //TO DO --> Recuperar los nuevos casos y pruebas del usuario
     jQuery('#addParticipantModal').modal('hide');
