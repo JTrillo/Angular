@@ -45,3 +45,6 @@ Thumbs.db
 
 # Credentials File
 /src/environments
+
+# When executing npm install package-lock.json will be generated again
+/package-lock.json
