@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { UserDataService } from './user-data.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-const API_ENDPOINT='http://34.76.28.34:3000/api/';
+const API_ENDPOINT='http://35.240.90.105:3000/api/';
 const NETWORK_NAMESPACE = 'uma.coc.network.';
 const HTTP_OPTIONS_GET = {
   headers: new HttpHeaders({
@@ -26,7 +26,7 @@ export class HyperledgerService {
   //Get any user profie from blockchain
   getProfile(identifier:string) {
     let resource_url = `${API_ENDPOINT}${NETWORK_NAMESPACE}Agent/${identifier}`;
-    return this.http.get(resource_url, HTTP_OPTIONS_GET);
+    return this.http.get(resource_url, {withCredentials: true});
   }
 
   //Get current user cases from blockchain and stores them in UserDataService

@@ -4,12 +4,21 @@
         <h1>Chain of Custody for Digital Evidences</h1>
         <hr>
         <div class="alert alert-light" role="alert">
-            <strong>If you want to participate in the Chain of Custody system, please fill this form. As soon as possible, it will be checked by an administrator and you will receive an e-mail with your credentials.</strong>
+            <strong>Welcome to the web application for the management of digital evidences. If you want to participate in the Chain of Custody system, please fill this form. As soon as possible, it will be checked by an administrator and you will receive an e-mail with your credentials.</strong>
+            <br>
+            <strong>If you are already inscribed in the system please <a href="http://35.240.90.105:3000/auth/github">click here</a>.</strong>
         </div>
     </div>
 
     <div class="col-md-6 offset-md-3 signupDiv">
         <div class="form-group row" style="margin-top:2%;">
+            <label class="col-md-3 col-form-label">Email</label>
+            <div class="col-md-9">
+                <input type="email" class="form-control" placeholder="peter.dun@test.com" formControlName="email">
+            </div>
+        </div>
+
+        <div class="form-group row">
             <label class="col-md-3 col-form-label">First name</label>
             <div class="col-md-9">
                 <input type="text" class="form-control" placeholder="Peter" formControlName="firstname">
@@ -68,12 +77,8 @@
         </div>
 
         <div class="form-group row">
-            <div class="col-md-4 offset-md-2">
+            <div class="col-md-4 offset-md-4">
                 <button type="submit" class="btn btn-outline-primary btn-block" [disabled]="form.invalid">Send</button>
-            </div>
-
-            <div class="col-md-4">
-                <button type="button" class="btn btn-outline-primary btn-block" (click)="signin()">Sign In</button>
             </div>
         </div>
     </div>

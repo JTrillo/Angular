@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { defineBase } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-signup',
@@ -16,6 +15,7 @@ export class SignupComponent implements OnInit {
   constructor(private router:Router,
               private db:AngularFirestore) {
     this.form = new FormGroup({
+      'email': new FormControl('', [Validators.required, Validators.email]),
       'firstname': new FormControl('', Validators.required),
       'lastname': new FormControl('', Validators.required),
       'birthdate': new FormControl('', Validators.required),
@@ -31,6 +31,7 @@ export class SignupComponent implements OnInit {
 
   sendRequest(){
     this.db.collection("new_users").add({
+      email: this.form.value.email,
       firstname: this.form.value.firstname,
       lasttname: this.form.value.lastname,
       birthdate: this.form.value.birthdate,
@@ -43,10 +44,6 @@ export class SignupComponent implements OnInit {
     }).catch(err => {
       console.error(`Error adding document: ${err}`);
     });
-  }
-
-  signin(){
-    this.router.navigate(['/login']);
   }
 
 }

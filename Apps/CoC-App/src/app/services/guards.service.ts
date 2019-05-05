@@ -16,7 +16,7 @@ export class LoggedGuard implements CanActivate {
       return true;
     }else{
       console.error("You have not permission to view this page");
-      this.router.navigate(['/login']);
+      this.router.navigate(['/signup']);
       return false;
     }
   }
