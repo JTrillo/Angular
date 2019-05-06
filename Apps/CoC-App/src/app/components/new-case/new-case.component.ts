@@ -23,10 +23,10 @@ export class NewCaseComponent implements OnInit {
   
   addCase(){
     console.log( this.form.value );
+    //Llamar a la transacción del chaincode 'OpenCase'
     this.hyperledger.postNewCase(this.form.value.identifier, this.form.value.description).subscribe(response =>{
       console.log(response);
     });
-    //TO DO --> Llamar a la transacción del chaincode 'OpenCase'
     //TO DO --> Recuperar los nuevos casos y pruebas del usuario
   }
 }

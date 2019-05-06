@@ -10,7 +10,9 @@ export class UserDataService {
   private userCases:Case[];
   private userEvidences:Evidence[];
 
-  constructor() { }
+  constructor() {
+    this.reset();
+  }
 
   //When logging, to set user profile
   setUserProfile(profile:Profile){
@@ -60,5 +62,12 @@ export class UserDataService {
       }
     }
     return undefined;
+  }
+
+  //Reset service
+  reset(){
+    this.userProfile = undefined;
+    this.userCases = [];
+    this.userEvidences = [];
   }
 }

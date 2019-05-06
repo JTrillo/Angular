@@ -1,27 +1,21 @@
 import { Injectable } from '@angular/core';
-import { UserDataService } from './user-data.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 const API_ENDPOINT='http://35.240.90.105:3000/api/';
 const NETWORK_NAMESPACE = 'uma.coc.network.';
-const HTTP_OPTIONS_GET = {
-  headers: new HttpHeaders({
-    'x-api-key': '1234567890'
-  })
-};
-const HTTP_OPTIONS_POST = {
-  headers: new HttpHeaders({
-    'Content-Type':  'application/json',
-    'x-api-key': '1234567890'
-  })
-}
+
 @Injectable({
   providedIn: 'root'
 })
 export class HyperledgerService {
 
-  constructor(private userdata: UserDataService,
-              private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
+
+  //Get user wallet
+  getWallet() {
+    let resource_url = `${API_ENDPOINT}wallet`;
+    return this.http.get(resource_url, {withCredentials: true});
+  }
 
   //Get any user profie from blockchain
   getProfile(identifier:string) {
@@ -31,23 +25,23 @@ export class HyperledgerService {
 
   //Get current user cases from blockchain and stores them in UserDataService
   getUserCases(identifier:string){
-    let participant_fqi = `${NETWORK_NAMESPACE}Agent#${identifier}`
+    let participant_fqi = `resource%3A${NETWORK_NAMESPACE}Agent%23${identifier}`
     let resource_url = `${API_ENDPOINT}queries/CasesByParticipant?participant_fqi=${participant_fqi}`
-    return this.http.get(resource_url, HTTP_OPTIONS_GET);
+    return this.http.get(resource_url, {withCredentials: true});
   }
 
   //Get current user evidences from blockchain and stores them in UserDataService
   getUserEvidences(identifier:string){
-    let owner_fqi = `${NETWORK_NAMESPACE}Agent#${identifier}`
+    let owner_fqi = `resource%3A${NETWORK_NAMESPACE}Agent%23${identifier}`
     let resource_url = `${API_ENDPOINT}queries/EvidencesByParticipant?owner_fqi=${owner_fqi}`
-    return this.http.get(resource_url, HTTP_OPTIONS_GET);
+    return this.http.get(resource_url, {withCredentials: true});
   }
 
   //Get evidences from case X
   getCaseEvidences(case_id:string){
-    let case_fqi = `${NETWORK_NAMESPACE}Case#${case_id}`
+    let case_fqi = `resource%3A${NETWORK_NAMESPACE}Case%23${case_id}`
     let resource_url = `${API_ENDPOINT}queries/EvidencesByCase?case_fqi=${case_fqi}`
-    return this.http.get(resource_url, HTTP_OPTIONS_GET);
+    return this.http.get(resource_url, {withCredentials: true});
   }
 
   //Create a new case
@@ -57,7 +51,7 @@ export class HyperledgerService {
       description: description
     };
     let resource_url = `${API_ENDPOINT}${NETWORK_NAMESPACE}OpenCase`;
-    return this.http.post(resource_url, data, HTTP_OPTIONS_POST);
+    return this.http.post(resource_url, data, {withCredentials: true});
 
   }
 }
@@ -80,8 +74,8 @@ export interface Case {
   resolution?:string,
   closureDate?:Date,
   status:string,
-  openedBy:Profile,
-  participants:Profile[]
+  openedBy:string,
+  participants:string[]
 }
 
 export interface Evidence {
@@ -90,7 +84,7 @@ export interface Evidence {
   hashType:string,
   description:string,
   additionDate:Date,
-  owner:Profile,
+  owner:string,
   olderOwners:Owner[],
   case:Case
 }

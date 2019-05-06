@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { Observable } from 'rxjs';
 
 import { UserDataService } from 'src/app/services/user-data.service';
-import { Evidence, Profile } from 'src/app/services/hyperledger.service';
+import { Evidence} from 'src/app/services/hyperledger.service';
 
 import { AngularFireStorage } from '@angular/fire/storage';
 
@@ -20,7 +20,7 @@ export class EvidenceComponent implements OnInit {
   evidence:Evidence;
   additionDate:string;
 
-  participants:Profile[] = []; //Participants in case that no are the current user
+  participants:string[] = []; //Participants in case that no are the current user
   participant_id:string; //Id of participant who is going to receive the evidence
   noSelected:boolean;
 
@@ -82,11 +82,11 @@ export class EvidenceComponent implements OnInit {
     return aux;
   }
 
-  private removeCurrentUser(participants:Profile[]): Profile[]{
-    let withoutCurrentUser:Profile[] = [];
+  private removeCurrentUser(participants:string[]): string[]{
+    let withoutCurrentUser:string[] = [];
     let user_id = this.userdata.getUserProfile().identifier;
     for(let aux = 0; aux<participants.length; aux++){
-      if(user_id != participants[aux].identifier){
+      if(user_id != participants[aux]){
         withoutCurrentUser.push(participants[aux]);
       }
     }

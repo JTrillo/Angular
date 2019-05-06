@@ -19,7 +19,7 @@ export class CaseComponent implements OnInit {
   openingDate:string;
   closureDate:string;
   today:string
-  participants:Profile[] = [];
+  participants:string[] = [];
   evidences:Evidence[] = [];
   currentUser:Profile;
   form:FormGroup;
@@ -74,7 +74,7 @@ export class CaseComponent implements OnInit {
     });
 
     //Disabling buttons
-    this.disabledUser = this.case.openedBy.identifier != this.currentUser.identifier;
+    this.disabledUser = this.case.openedBy != this.currentUser.identifier;
     this.disabledClosed = this.case.status == 'CLOSED';
 
    }
@@ -154,7 +154,7 @@ export class CaseComponent implements OnInit {
 
   private isAlreadyInvolved(participant_id:string): boolean{
     for(let aux of this.case.participants){
-      if(aux.identifier == participant_id){
+      if(aux == participant_id){
         return true;
       }
     }
