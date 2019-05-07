@@ -31,5 +31,14 @@
             </div>
         </div>
 
+        <div class="text-center">
+            <div class="spinner-border" role="status" *ngIf="loading">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <div class="alert alert-success col-md-12" role="alert" *ngIf="tx_id !== undefined">
+                Case {{form.value.identifier}} created successfully (transaction id: {{tx_id}})
+            </div>
+        </div>
+
     </div>
 </form>

@@ -59,7 +59,7 @@ export class CaseComponent implements OnInit {
 
     //EVIDENCES - CHANGE IT
     this.hyperledger.getCaseEvidences(this.case.identifier).subscribe(response =>{
-      console.log(response);
+      //console.log(response);
       this.evidences = []; //CAMBIAR;
     });
 
@@ -110,36 +110,49 @@ export class CaseComponent implements OnInit {
 
     //Get id entered
     this.newParticipantId = this.form.value['newParticipantId'];
+    this.newParticipantId = this.newParticipantId.replace(/\s/g, '');
 
-    //If user already participates in case, it is not needed to include him/her
-    if(this.isAlreadyInvolved(this.newParticipantId)){ //Show a warning
-      this.switchControl = 2;
-    }else{ //Search participant in the blockchain
-      this.hyperledger.getProfile(this.newParticipantId).subscribe(response =>{
-        //User exists in system
-        console.log(response);
-        this.switchControl = 3;
-        this.newParticipantDisplay = `${response['lastName']}, ${response['firstName']} (${response['participantId']})`;
-      }, error => {
-        //User does not exist in system
-        console.log(error);
-        this.switchControl = 1; //Show an error
-      });
+    if(this.newParticipantId !== undefined && this.newParticipantId !== '' && this.newParticipantId !== null){
+      //If user already participates in case, it is not needed to include him/her
+      if(this.isAlreadyInvolved(this.newParticipantId)){ //Show a warning
+        this.switchControl = 2;
+      }else{ //Search participant in the blockchain
+        this.switchControl = 5;
+        this.hyperledger.getProfile(this.newParticipantId).subscribe(response =>{
+          //User exists in system
+          console.log(response);
+          this.switchControl = 3;
+          this.newParticipantDisplay = `${response['lastName']}, ${response['firstName']} (${response['participantId']})`;
+        }, error => {
+          //User does not exist in system
+          console.log(error);
+          this.switchControl = 1; //Show an error
+        });
+      }
+    }else{
+      this.switchControl = 4;
     }
+    
   }
 
   cleanSelected(){
     this.newParticipantId = undefined;
     this.switchControl = 0;
+    this.form.value['newParticipantId'] = '';
   }
 
   addParticipant(){
     console.log(`Adding participant ${this.newParticipantId} to case ${this.case.identifier}`);
-    this.cleanSelected();
-    //TO DO --> Llamar a la transacción del chaincode 'AddParticipant'
-    //TO DO --> Recuperar los nuevos casos y pruebas del usuario
-    jQuery('#addParticipantModal').modal('hide');
-    this.router.navigate(['/case',this.case.identifier]);
+    this.switchControl = 6;
+    //Llamar a la transacción del chaincode 'AddParticipant'
+    this.hyperledger.postAddParticipant(this.case.identifier, 'AGENT', this.newParticipantId).subscribe(response => {
+      console.log(response);
+      //Añadir el nuevo participante al caso
+      this.userdata.addParticipantToCase(this.newParticipantId, this.case.identifier);
+      jQuery('#addParticipantModal').modal('hide');
+      //this.cleanSelected();
+      this.router.navigate(['/case',this.case.identifier]);
+    });
   }
 
   goBack(){
@@ -147,8 +160,9 @@ export class CaseComponent implements OnInit {
   }
 
   private dateToInputDate(date:Date): string{
+    let day = date.getDate() < 10 ? '0'+(date.getDate()) : date.getDate();
     let month = date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1;
-    let aux = `${date.getFullYear()}-${month}-${date.getDate()}`;
+    let aux = `${date.getFullYear()}-${month}-${day}`;
     return aux;
   }
 

@@ -44,7 +44,7 @@ export class HyperledgerService {
     return this.http.get(resource_url, {withCredentials: true});
   }
 
-  //Create a new case
+  //1. OpenCase transaction of the blockchain - This tx creates a new case
   postNewCase(case_id:string, description:string){
     let data = {
       id: case_id,
@@ -52,7 +52,17 @@ export class HyperledgerService {
     };
     let resource_url = `${API_ENDPOINT}${NETWORK_NAMESPACE}OpenCase`;
     return this.http.post(resource_url, data, {withCredentials: true});
+  }
 
+  //3. AddParticipant transaction of the blockchain - This tx includes a participant (in this moment, only agents) in a case
+  postAddParticipant(case_id:string, participant_type:string, participant_id:string){
+    let data = {
+      case_id: case_id,
+      participant_type: participant_type,
+      participant_id: participant_id
+    };
+    let resource_url = `${API_ENDPOINT}${NETWORK_NAMESPACE}AddParticipant`;
+    return this.http.post(resource_url, data, {withCredentials: true});
   }
 }
 

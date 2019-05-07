@@ -64,6 +64,16 @@ export class UserDataService {
     return undefined;
   }
 
+  //Add participant to case
+  addParticipantToCase(participant_id:string, case_id:string){
+    for(let aux of this.userCases){
+      if(aux.identifier === case_id){
+        aux.participants.push(participant_id);
+        return;
+      }
+    }
+  }
+
   //Reset service
   reset(){
     this.userProfile = undefined;
