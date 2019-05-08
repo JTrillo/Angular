@@ -8,11 +8,14 @@
                 <div class="column" *ngFor="let case of cases">
                     <div class="card" style="width: 23rem;">
                         <div class="card-body">
-                            <h5 align="center" style="text-transform: uppercase;" class="card-title">{{case.identifier}}</h5>
+                            <h5 align="center" style="text-transform: uppercase;" class="card-title">{{case.identifier}} <b *ngIf="case.status !== 'OPENED'">(CLOSED)</b></h5>
                             <p class="card-text">{{case.description}}</p>
                             <a [routerLink]="['/case',case.identifier]" class="btn btn-outline-primary btn-block">See details</a>
                         </div>
                     </div>
+                </div>
+                <div class="alert alert-info col-md-12" role="alert" *ngIf="no_cases">
+                    <b>You are not participating in any case.</b>
                 </div>
             </div>
         </div>
@@ -31,6 +34,9 @@
                             <a [routerLink]="['/evidence', evidence.identifier]" class="btn btn-outline-primary btn-block">See details</a>
                         </div>
                     </div>
+                </div>
+                <div class="alert alert-info col-md-12" role="alert" *ngIf="no_evidences">
+                    <b>You are not the temporary owner of any evidence.</b>
                 </div>
             </div>
         </div>

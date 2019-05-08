@@ -24,7 +24,7 @@
 
             <label class="col-md-2 col-form-label">Closure date</label>
             <div class="col-md-4">
-                <input class="form-control" type="date" [value]="closureDate" formControlName="closureDate" [min]="openingDate" [max]="today">
+                <input class="form-control" type="date" [value]="closureDate" formControlName="closureDate" [min]="openingDate" [max]="today" [disabled]="closed">
             </div>
         </div>
 
@@ -38,7 +38,7 @@
         <div class="form-group row">
             <label class="col-md-2 col-form-label">Resolution</label>
             <div class="col-md-10">
-                <textarea class="form-control" placeholder="Enter a resolution" formControlName="resolution">{{case.resolution}}</textarea>
+                <textarea class="form-control" placeholder="Enter a resolution" formControlName="resolution" [disabled]="closed">{{case.resolution}}</textarea>
             </div>
         </div>
 
@@ -46,18 +46,18 @@
             <div class="alert alert-danger col-md-12" role="alert" *ngIf="displayError">
                 In order to close the case you need to fill fields <b>Closure date</b> and <b>Resolution</b>.
             </div>
-            <!--<div class="text-center offset-4" *ngIf="closing">
+            <div class="text-center offset-4" *ngIf="closing">
                 <div class="spinner-border" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
                 Closing case...
-            </div>-->
+            </div>
         </div>
 
         <hr><br>
 
         <div class="form-group row">
-            <div class="col-md-6">
+            <div class="col-md-9">
                 <h2 align="center">Evidences</h2>
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -77,33 +77,34 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="alert alert-info" role="alert" *ngIf="evidences.length === 0">
+                    Evidences have not been added to this case yet.
+                </div>
 
-                <div class="col-md-6 offset-md-3">
-                    <button type="button" class="btn btn-outline-primary btn-block" [routerLink]="['newevidence']" [disabled]="disabledClosed">Upload evidence</button>
+                <div class="col-md-4 offset-md-4">
+                    <button type="button" class="btn btn-outline-primary btn-block" [routerLink]="['newevidence']" [hidden]="closed">Upload evidence</button>
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <h2 align="center">Participants</h2>
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>Participant identifier</th>
-                                <!--<th>Name</th>-->
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let participant of participants">
-                                <td>{{participant}}</td>
-                                <!--<td>{{participant.lastName + ', ' + participant.firstName}}</td>-->
+                                <td><a [routerLink]="['/profile', participant]">{{participant}}</a></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div class="col-md-6 offset-md-3">
-                    <button type="button" class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#addParticipantModal" [disabled]="disabledClosed || disabledUser">Add participant</button>
+                <div class="col-md-8 offset-md-2">
+                    <button type="button" class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#addParticipantModal" [disabled]="disabledUser" [hidden]="closed">Add participant</button>
                 </div>
 
                 <div class="modal fade" id="addParticipantModal" role="dialog">
@@ -173,7 +174,7 @@
         <div class="form-group row">
 
             <div class="col-md-3 offset-md-3">
-                <button type="submit" class="btn btn-outline-primary btn-block" [disabled]="disabledClosed || disabledUser">Close case</button>
+                <button type="submit" class="btn btn-outline-primary btn-block" [disabled]="closed || disabledUser">Close case</button>
             </div>
 
             <div class="col-md-3">

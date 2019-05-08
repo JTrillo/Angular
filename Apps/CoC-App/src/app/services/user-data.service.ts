@@ -63,6 +63,17 @@ export class UserDataService {
     }
     return undefined;
   }
+  
+  //Close case
+  closeCase(case_id:string, resolution:string){
+    this.userCases.forEach((value, i)=>{
+      if(value.identifier === case_id){
+        this.userCases[i].status = "CLOSED";
+        this.userCases[i].resolution = resolution;
+        this.userCases[i].closureDate = new Date();
+      }
+    })
+  }
 
   //Add participant to case
   addParticipantToCase(participant_id:string, case_id:string){

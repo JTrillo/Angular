@@ -31,51 +31,10 @@
         <input type="text" class="col-md-4 form-control" [value]="profile.office" [disabled]="true">
     </div>
 
-    <div *ngIf="other_profile; else other_content2">
+    <div *ngIf="other_profile">
         <div class="form-group row" *ngIf="other_profile">
             <button type="button" class="btn btn-outline-primary col-md-2 offset-md-5" (click)="backPressed()">Back</button>
         </div>
     </div>
-    <ng-template #other_content2>
-        <form [formGroup]="form" (ngSubmit)="changePassword()">
-            <div class="col-md-8 offset-md-2 profileDiv">
-                <div class="form-group row" style="margin-top:2%;">
-                    <label class="col-md-4 col-form-label">Current password</label>
-                    <div class="col-md-8">
-                        <input type="password" class="form-control" placeholder="Current pass" formControlName="cur_pass">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-md-4 col-form-label">New password</label>
-                    <div class="col-md-8">
-                        <input type="password" class="form-control" placeholder="New pass" formControlName="new_pass">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-md-4 col-form-label">Repeat new password</label>
-                    <div class="col-md-8">
-                        <input type="password" class="form-control" placeholder="Repeat new pass" formControlName="rep_pass">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-md-4 offset-md-4">
-                        <button type="submit" class="btn btn-outline-primary btn-block" [disabled]="form.invalid">Change password</button>
-                    </div>
-                </div>
-
-                <div style="margin-top:1%" *ngIf="showError">
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>{{errorMsg}}</strong>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </ng-template>
 
 </div>

@@ -25,7 +25,7 @@ export class CaseComponent implements OnInit {
   form:FormGroup;
 
   disabledUser:boolean;
-  disabledClosed:boolean;
+  closed:boolean;
 
   displayError:boolean=false;
 
@@ -33,6 +33,8 @@ export class CaseComponent implements OnInit {
   newParticipantId:string=undefined;
   newParticipantDisplay:string=undefined;
   switchControl:number=0;
+
+  closing:boolean;
 
   constructor(private activatedRoute:ActivatedRoute,
               private location:Location,
@@ -75,16 +77,12 @@ export class CaseComponent implements OnInit {
 
     //Disabling buttons
     this.disabledUser = this.case.openedBy != this.currentUser.identifier;
-    this.disabledClosed = this.case.status == 'CLOSED';
+    this.closed = this.case.status === 'CLOSED';
 
+    this.closing = false;
    }
 
   ngOnInit() {
-  }
-
-  addEvidence(){
-    console.log("add evidence click");
-    //TO DO --> Ir a la vista de creación de nueva evidencia
   }
 
   closeCase(){
@@ -94,9 +92,16 @@ export class CaseComponent implements OnInit {
       let check = confirm(`¿Está seguro de que desea cerrar el caso ${this.case.identifier}?`);
       if(check){
         console.log("Closing case...");
-        //TO DO --> Llamar a la transacción del chaincode 'CloseCase'
-        //TO DO --> Recuperar los nuevos casos y pruebas del usuario
-        this.router.navigate(['/home']);
+        this.closing = true;
+        //Llamar a la transacción del chaincode 'CloseCase'
+        this.hyperledger.postCloseCase(this.case.identifier, this.form.value.resolution).subscribe(response => {
+          console.log(response);
+          this.closing = false;
+          //SEGUIR POR AQUI TRAS COMER
+          //TO DO --> Recuperar los nuevos casos y pruebas del usuario
+          this.router.navigate(['/home']);
+        })
+        
       }
     }else{
       this.displayError=true;

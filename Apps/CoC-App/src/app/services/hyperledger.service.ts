@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-const API_ENDPOINT='http://35.240.90.105:3000/api/';
+const API_ENDPOINT='http://104.155.2.231:3000/api/';
 const NETWORK_NAMESPACE = 'uma.coc.network.';
 
 @Injectable({
@@ -51,6 +51,16 @@ export class HyperledgerService {
       description: description
     };
     let resource_url = `${API_ENDPOINT}${NETWORK_NAMESPACE}OpenCase`;
+    return this.http.post(resource_url, data, {withCredentials: true});
+  }
+
+  //2. CloseCase transaction of the blockchain - This tx closes a case
+  postCloseCase(case_id:string, resolution:string){
+    let data = {
+      id: case_id,
+      resolution: resolution
+    };
+    let resource_url = `${API_ENDPOINT}${NETWORK_NAMESPACE}CloseCase`;
     return this.http.post(resource_url, data, {withCredentials: true});
   }
 
