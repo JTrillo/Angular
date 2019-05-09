@@ -77,8 +77,9 @@ export class EvidenceComponent implements OnInit {
   }
 
   private dateToInputDate(date:Date): string{
+    let day = date.getDate() < 10 ? '0'+(date.getDate()) : date.getDate();
     let month = date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1;
-    let aux = `${date.getFullYear()}-${month}-${date.getDate()}`;
+    let aux = `${date.getFullYear()}-${month}-${day}`;
     return aux;
   }
 

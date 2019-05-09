@@ -5,7 +5,7 @@
     <div class="form-group row">
         <label class="col-md-1 col-form-label">Hash</label>
         <div class="col-md-6">
-            <input type="text" class="form-control" [value]="evidence.hash + ' (' + evidence.hashType + ')'" disabled>
+            <input type="text" class="form-control" [value]="evidence.hash_value + ' (' + evidence.hash_type + ')'" disabled>
         </div>
 
         <label class="col-md-2 col-form-label">Addition Date</label>
@@ -40,8 +40,9 @@
                         <td>{{owner.until | date: 'dd/MM/yyyy'}}</td>
                     </tr>
                     <tr>
-                        <th>{{evidence.owner.identifier}}</th>
-                        <th>{{evidence.olderOwners[evidence.olderOwners.length-1].until | date: 'dd/MM/yyyy'}}</th>
+                        <th>{{evidence.owner}}</th>
+                        <th *ngIf="evidence.olderOwners.length==0">{{evidence.additionDate | date: 'dd/MM/yyyy'}}</th>
+                        <th *ngIf="evidence.olderOwners.length>0">{{evidence.olderOwners[evidence.olderOwners.length-1].until | date: 'dd/MM/yyyy'}}</th>
                         <th>...</th>
                     </tr>
                 </tbody>
@@ -68,11 +69,13 @@
                         <div class="modal-body">
                             <div class="list-group">
                                 <div *ngFor="let participant of participants">
-                                    <button type="button" class="list-group-item list-group-item-action active" *ngIf="participant_id==participant.identifier" (click)="participantSelected(participant.identifier)">
-                                        {{participant.lastName}}, {{participant.firstName}} ({{participant.identifier}})
+                                    <button type="button" class="list-group-item list-group-item-action active" *ngIf="participant_id==participant" (click)="participantSelected(participant)">
+                                        <!--{{participant.lastName}}, {{participant.firstName}} ({{participant.identifier}})-->
+                                        {{participant}}
                                     </button>
-                                    <button type="button" class="list-group-item list-group-item-action" *ngIf="participant_id!=participant.identifier" (click)="participantSelected(participant.identifier)">
-                                        {{participant.lastName}}, {{participant.firstName}} ({{participant.identifier}})
+                                    <button type="button" class="list-group-item list-group-item-action" *ngIf="participant_id!=participant" (click)="participantSelected(participant)">
+                                        <!--{{participant.lastName}}, {{participant.firstName}} ({{participant.identifier}})-->
+                                        {{participant}}
                                     </button>
                                 </div>
                             </div>

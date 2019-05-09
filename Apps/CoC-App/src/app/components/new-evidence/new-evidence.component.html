@@ -8,11 +8,9 @@
             <div class="col-md-4">
                 <input type="text" class="form-control" placeholder="Enter identifier" formControlName="identifier">
             </div>
-        </div>
 
-        <div class="form-group row">
             <label class="col-md-2 col-form-label">Hash Type</label>
-            <div class="col-md-2">
+            <div class="col-md-4">
                 <select class="form-control" formControlName="hash_type">
                     <option disabled selected value> -- Select one -- </option>
                     <option value="MD5">MD5</option>
@@ -21,9 +19,11 @@
                     <option value="SHA512">SHA-512</option>
                 </select>
             </div>
+        </div>
 
-            <label class="col-md-2 col-form-label">Hash Value</label>
-            <div class="col-md-6">
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label">Hash Value *</label>
+            <div class="col-md-10">
                 <input type="text" class="form-control" placeholder="Enter hash value" formControlName="hash_value">
             </div>
         </div>
@@ -46,6 +46,10 @@
         </div>
 
         <div class="form-group row">
+            <i><b>* If you have not any tool to calculate the hash value, we recommend this one. <a [href]="hash_utility_url" target="_blank"></a></b></i>
+        </div>
+
+        <div class="form-group row">
             <div class="col-md-3 offset-md-3">
                 <button type="submit" class="btn btn-outline-primary btn-block" [disabled]="form.invalid || end">Add evidence</button>
             </div>
@@ -59,6 +63,16 @@
             <div class="alert alert-warning col-md-12" role="alert">
                 All fields must be filled
             </div>
+        </div>
+
+        <div class="text-center" *ngIf="executing_tx">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            Waiting for blockchain response...
+        </div>
+        <div class="alert alert-success" role="alert" *ngIf="uploading">
+            Transaction executed succesfully. Uploading evidence copy to file repository.
         </div>
 
         <div *ngIf="percentage | async as pct">

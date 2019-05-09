@@ -74,6 +74,20 @@ export class HyperledgerService {
     let resource_url = `${API_ENDPOINT}${NETWORK_NAMESPACE}AddParticipant`;
     return this.http.post(resource_url, data, {withCredentials: true});
   }
+
+  //4. AddEvidence transaction of the blockchain -
+  postAddEvidence(evd_id:string, hash:string, hash_type:string, description:string, case_id:string){
+    let data = {
+      evidence_id: evd_id,
+      hash: hash,
+      hash_type: hash_type,
+      description: description,
+      case_id: case_id
+    };
+    let resource_url = `${API_ENDPOINT}${NETWORK_NAMESPACE}AddEvidence`;
+    return this.http.post(resource_url, data, {withCredentials: true});
+
+  }
 }
 
 export interface Profile {
@@ -100,8 +114,8 @@ export interface Case {
 
 export interface Evidence {
   identifier:string,
-  hash:string,
-  hashType:string,
+  hash_value:string,
+  hash_type:string,
   description:string,
   additionDate:Date,
   owner:string,
@@ -109,7 +123,7 @@ export interface Evidence {
   case:Case
 }
 
-interface Owner {
+export interface Owner {
   owner:string,
   until:Date
 }

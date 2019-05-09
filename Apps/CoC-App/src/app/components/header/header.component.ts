@@ -35,4 +35,12 @@ export class HeaderComponent implements OnInit {
     return false;
   }
 
+  isTech(): boolean{
+    if(this.userdata.getUserProfile().office === "FORENSICS_TECHNICIAN"){
+      return true;
+    }
+
+    return false;
+  }
+
 }

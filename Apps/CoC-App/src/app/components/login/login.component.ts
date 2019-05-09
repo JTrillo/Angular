@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { HyperledgerService, Profile, Case, Evidence } from '../../services/hyperledger.service';
+import { HyperledgerService, Profile, Case, Evidence, Owner } from '../../services/hyperledger.service';
 import { UserDataService } from '../../services/user-data.service';
 
 @Component({
@@ -29,7 +29,6 @@ export class LoginComponent implements OnInit {
         this.msg = "Loading your cases";
         //Get user cases
         this.hyperledger.getUserCases(participantId).subscribe(cases=>{
-          console.log(cases);
           if(cases['length'] > 0){
             this.setCases(cases);
           }
@@ -38,7 +37,7 @@ export class LoginComponent implements OnInit {
           //Get user evidences
           this.hyperledger.getUserEvidences(participantId).subscribe(evidences=>{
             if(evidences['length'] > 0){
-              this.userdata.setUserEvidences([]);
+              this.setEvidences(evidences);
             }
             this.pct = 100;
             //Navigate home page
@@ -85,5 +84,32 @@ export class LoginComponent implements OnInit {
       cases.push(caso);
     });
     this.userdata.setUserCases(cases);
+  }
+
+  private setEvidences(response){
+    let evidences:Evidence[]= [];
+    response.forEach(element =>{
+      let olderOwners = [];
+      element['olderOwners'].forEach(element2 => {
+        let olderOwner:Owner = {
+          owner: element2['owner'],
+          until: element2['till']
+        }
+        olderOwners.push(olderOwner);
+      });
+      let caso = this.userdata.getCase(element['caso'].split('#')[1]);
+      let evidence:Evidence = {
+        identifier: element['evidenceId'],
+        hash_value: element['hash'],
+        hash_type: element['hash_type'],
+        description: element['description'],
+        additionDate: new Date(element['additionDate']),
+        owner: element['owner'].split('#')[1],
+        olderOwners: olderOwners,
+        case: caso
+      }
+      evidences.push(evidence);
+    });
+    this.userdata.setUserEvidences(evidences);
   }
 }

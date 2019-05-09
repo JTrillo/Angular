@@ -64,7 +64,7 @@ export class UserDataService {
     return undefined;
   }
   
-  //Close case
+  //2.Close case
   closeCase(case_id:string, resolution:string){
     this.userCases.forEach((value, i)=>{
       if(value.identifier === case_id){
@@ -75,7 +75,7 @@ export class UserDataService {
     })
   }
 
-  //Add participant to case
+  //3. Add participant to case
   addParticipantToCase(participant_id:string, case_id:string){
     for(let aux of this.userCases){
       if(aux.identifier === case_id){
