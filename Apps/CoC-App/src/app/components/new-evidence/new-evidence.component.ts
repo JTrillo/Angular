@@ -21,6 +21,7 @@ export class NewEvidenceComponent implements OnInit {
   form:FormGroup;
   file:File;
   filename:String = "Choose a file";
+  file_extension:string;
 
   // Main task 
   task: AngularFireUploadTask;
@@ -71,7 +72,7 @@ export class NewEvidenceComponent implements OnInit {
     let description = this.form.value.description;
     //Llamar a la transacción del chaicode 'AddEvidence'
     this.executing_tx = true;
-    this.hyperledger.postAddEvidence(identifier, hash, hash_type, description, this.case_id).subscribe(response =>{
+    this.hyperledger.postAddEvidence(identifier, hash, hash_type, description, this.file_extension, this.case_id).subscribe(response =>{
       console.log(response);
       this.executing_tx = false;
       this.uploading = true;
@@ -82,7 +83,7 @@ export class NewEvidenceComponent implements OnInit {
 
   uploadEvidence(identifier:string){
     // The storage path
-    const path = `${this.case_id}/${identifier}`;
+    const path = `${this.case_id}/${identifier}.${this.file_extension}`;
     // The main task
     this.task = this.storage.upload(path, this.file);
     // Progress monitoring
@@ -100,6 +101,7 @@ export class NewEvidenceComponent implements OnInit {
             hash_value: this.form.value.hash_value,
             hash_type: this.form.value.hash_type,
             description: this.form.value.description,
+            extension: this.file_extension,
             additionDate: new Date(),
             owner: this.userdata.getUserProfile().identifier,
             olderOwners: [],
@@ -116,6 +118,8 @@ export class NewEvidenceComponent implements OnInit {
   getFile(event: FileList){
     this.file = event.item(0);
     this.filename = this.file.name;
+    let aux = this.filename.split(".");
+    this.file_extension = aux[aux.length-1];
   }
 
   goBack(){

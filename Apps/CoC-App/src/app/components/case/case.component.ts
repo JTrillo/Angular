@@ -49,20 +49,19 @@ export class CaseComponent implements OnInit {
       let case_id = params['case_id'];
       this.case = this.userdata.getCase(case_id);
     });
-    //this.case = this.userdata.getUserCases()[0];
     
     this.openingDate = this.dateToInputDate(this.case.openingDate);
     if(this.case.closureDate!=undefined){
       this.closureDate = this.dateToInputDate(this.case.closureDate);
     }else{
-      //this.closureDate = this.today;
+      this.closureDate = this.today;
     }
     this.participants = this.case.participants;
 
-    //EVIDENCES - CHANGE IT
+    //EVIDENCES
     this.hyperledger.getCaseEvidences(this.case.identifier).subscribe(response =>{
-      //console.log(response);
-      this.evidences = []; //CAMBIAR;
+      console.log(response);
+      this.setEvidences(response);
     });
 
     //CURRENT USER
@@ -97,8 +96,8 @@ export class CaseComponent implements OnInit {
         this.hyperledger.postCloseCase(this.case.identifier, this.form.value.resolution).subscribe(response => {
           console.log(response);
           this.closing = false;
-          //SEGUIR POR AQUI TRAS COMER
-          //TO DO --> Recuperar los nuevos casos y pruebas del usuario
+          //Eliminar las evidencias del caso del servicio userdata y poner el caso a closed
+          this.userdata.closeCase(this.case.identifier, this.form.value.resolution);
           this.router.navigate(['/home']);
         })
         
@@ -152,7 +151,7 @@ export class CaseComponent implements OnInit {
     //Llamar a la transacción del chaincode 'AddParticipant'
     this.hyperledger.postAddParticipant(this.case.identifier, 'AGENT', this.newParticipantId).subscribe(response => {
       console.log(response);
-      //Añadir el nuevo participante al caso
+      //Añadir el nuevo participante al caso del servicio user data
       this.userdata.addParticipantToCase(this.newParticipantId, this.case.identifier);
       jQuery('#addParticipantModal').modal('hide');
       //this.cleanSelected();
@@ -178,6 +177,26 @@ export class CaseComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  private setEvidences(response){
+    let evidences:Evidence[]= [];
+    response.forEach(element =>{
+      let caso = this.userdata.getCase(element['caso'].split('#')[1]);
+      let evidence:Evidence = {
+        identifier: element['evidenceId'],
+        hash_value: element['hash'],
+        hash_type: element['hash_type'],
+        description: element['description'],
+        extension: element['extension'],
+        additionDate: new Date(element['additionDate']),
+        owner: element['owner'].split('#')[1],
+        olderOwners: [],
+        case: caso
+      }
+      evidences.push(evidence);
+    });
+    this.evidences = evidences;
   }
 
 }

@@ -71,6 +71,11 @@ export class UserDataService {
         this.userCases[i].status = "CLOSED";
         this.userCases[i].resolution = resolution;
         this.userCases[i].closureDate = new Date();
+        //Eliminate the evidences of this case
+        this.userEvidences = this.userEvidences.filter((value, index, array)=>{
+          return value.case.identifier !== case_id;
+        });
+        return;
       }
     })
   }

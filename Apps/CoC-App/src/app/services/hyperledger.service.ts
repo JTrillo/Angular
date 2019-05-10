@@ -76,12 +76,13 @@ export class HyperledgerService {
   }
 
   //4. AddEvidence transaction of the blockchain -
-  postAddEvidence(evd_id:string, hash:string, hash_type:string, description:string, case_id:string){
+  postAddEvidence(evd_id:string, hash:string, hash_type:string, description:string, extension:string, case_id:string){
     let data = {
       evidence_id: evd_id,
       hash: hash,
       hash_type: hash_type,
       description: description,
+      extension: extension,
       case_id: case_id
     };
     let resource_url = `${API_ENDPOINT}${NETWORK_NAMESPACE}AddEvidence`;
@@ -117,6 +118,7 @@ export interface Evidence {
   hash_value:string,
   hash_type:string,
   description:string,
+  extension:string,
   additionDate:Date,
   owner:string,
   olderOwners:Owner[],

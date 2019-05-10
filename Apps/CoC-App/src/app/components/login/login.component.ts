@@ -103,6 +103,7 @@ export class LoginComponent implements OnInit {
         hash_value: element['hash'],
         hash_type: element['hash_type'],
         description: element['description'],
+        extension: element['extension'],
         additionDate: new Date(element['additionDate']),
         owner: element['owner'].split('#')[1],
         olderOwners: olderOwners,

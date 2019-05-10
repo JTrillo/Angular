@@ -70,7 +70,8 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let evidence of evidences">
-                                <td><a [routerLink]="['/evidence', evidence.identifier]">{{evidence.identifier}}</a></td>
+                                <td *ngIf="evidence.owner === currentUser.identifier"><a [routerLink]="['/evidence', evidence.identifier]">{{evidence.identifier}}</a></td>
+                                <td *ngIf="evidence.owner !== currentUser.identifier">{{evidence.identifier}}</td>
                                 <td>{{evidence.description}}</td>
                                 <td>{{evidence.owner}}</td>
                             </tr>

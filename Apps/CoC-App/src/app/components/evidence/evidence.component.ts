@@ -67,7 +67,7 @@ export class EvidenceComponent implements OnInit {
 
   downloadCopy(){
     console.log("downloadCopy pressed");
-    const path = `${this.evidence.case.identifier}/${this.evidence.identifier}`;
+    const path = `${this.evidence.case.identifier}/${this.evidence.identifier}.${this.evidence.extension}`;
     const ref = this.storage.ref(path);
     this.downloadUrl = ref.getDownloadURL();
   }
