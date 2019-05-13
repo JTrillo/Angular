@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators} from '@angular/forms';
 
 import { AuthService } from 'src/app/services/auth.service';
 import { UserDataService } from 'src/app/services/user-data.service';
@@ -14,8 +15,15 @@ export class HeaderComponent implements OnInit {
   text1:string = 'Chain of Custody Web App';
   userDisplay:string;
 
+  form:FormGroup;
+
   constructor(private auth:AuthService,
-              private userdata:UserDataService) { }
+              private userdata:UserDataService) {
+
+    this.form = new FormGroup({
+      'keyword': new FormControl('', Validators.required)
+    });
+  }
 
   ngOnInit() {
     
@@ -31,7 +39,6 @@ export class HeaderComponent implements OnInit {
       this.userDisplay = `${profile.lastName}, ${profile.firstName} (${profile.identifier}) `;
       return true;
     }
-
     return false;
   }
 
@@ -39,8 +46,11 @@ export class HeaderComponent implements OnInit {
     if(this.userdata.getUserProfile().office === "FORENSICS_TECHNICIAN"){
       return true;
     }
-
     return false;
+  }
+
+  search(){
+    console.log(this.form.value.keyword);
   }
 
 }

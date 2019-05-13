@@ -14,7 +14,12 @@
             <li class="nav-item" routerLinkActive="active">
                 <a class="nav-link" routerLink="profile">My profile</a>
             </li>
+            <form class="form-inline" [formGroup]="form" (ngSubmit)="search()">
+                <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" formControlName="keyword">
+                <button type="submit" class="btn btn-sm btn-light my-2">Search</button>
+            </form>
         </ul>
+
         <span class="navbar-text">
             Logged as: {{userDisplay}}
             <button type="button" class="btn btn-sm btn-light" (click)="logout()">Sign out</button>
