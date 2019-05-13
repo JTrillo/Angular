@@ -55,7 +55,7 @@
             </div>
 
             <div class="col-md-3">
-                <button type="button" class="btn btn-outline-primary btn-block" (click)="goBack()">Go back</button>
+                <button type="button" class="btn btn-outline-primary btn-block" (click)="goBack()" [disabled]="executing_tx || uploading || end">Go back</button>
             </div>
         </div>
 

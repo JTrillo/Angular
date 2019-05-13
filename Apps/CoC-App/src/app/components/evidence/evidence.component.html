@@ -34,15 +34,15 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let owner of evidence.olderOwners; let i = index">
-                        <td>{{owner.owner}}</td>
-                        <td *ngIf="i==0">{{evidence.additionDate | date: 'dd/MM/yyyy'}}</td>
-                        <td *ngIf="i>0">{{evidence.olderOwners[i-1].until | date: 'dd/MM/yyyy'}}</td>
-                        <td>{{owner.until | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{owner.owner.split('#')[1]}}</td>
+                        <td *ngIf="i==0">{{evidence.additionDate | date: 'dd/MM/yyyy HH:mm:ss z'}}</td>
+                        <td *ngIf="i>0">{{evidence.olderOwners[i-1].until | date: 'dd/MM/yyyy HH:mm:ss z'}}</td>
+                        <td>{{owner.until | date: 'dd/MM/yyyy HH:mm:ss z'}}</td>
                     </tr>
                     <tr>
                         <th>{{evidence.owner}}</th>
-                        <th *ngIf="evidence.olderOwners.length==0">{{evidence.additionDate | date: 'dd/MM/yyyy'}}</th>
-                        <th *ngIf="evidence.olderOwners.length>0">{{evidence.olderOwners[evidence.olderOwners.length-1].until | date: 'dd/MM/yyyy'}}</th>
+                        <th *ngIf="evidence.olderOwners.length==0">{{evidence.additionDate | date: 'dd/MM/yyyy HH:mm:ss z'}}</th>
+                        <th *ngIf="evidence.olderOwners.length>0">{{evidence.olderOwners[evidence.olderOwners.length-1].until | date: 'dd/MM/yyyy HH:mm:ss z'}}</th>
                         <th>...</th>
                     </tr>
                 </tbody>
@@ -83,6 +83,12 @@
                             <div class="alert alert-danger" role="alert" *ngIf="noSelected" style="margin-top: 1%;">
                                 <strong>Please select the destination participant of the evidence</strong>
                             </div>
+                            <div class="text-center" *ngIf="transferring">
+                                <div class="spinner-border" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                Transferring evidence <b>{{evidence.identifier}}</b> to participant <b>{{participant_id}}</b>...
+                            </div>
                         </div>
                         <!-- Footer -->
                         <div class="modal-footer">
@@ -103,9 +109,4 @@
         </div>
     </div>
 
-    <div *ngIf="downloadUrl | async as url">
-        <div class="alert alert-success col-md-12" role="alert">
-            <b>{{url}}</b>
-        </div>
-    </div>
 </div>

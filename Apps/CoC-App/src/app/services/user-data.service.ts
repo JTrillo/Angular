@@ -90,6 +90,13 @@ export class UserDataService {
     }
   }
 
+  //5. Transfer evidence
+  transferEvidence(evi_id:string){
+    this.userEvidences = this.userEvidences.filter((value, index, array)=>{
+      return value.identifier !== evi_id;
+    });
+  }
+
   //Reset service
   reset(){
     this.userProfile = undefined;

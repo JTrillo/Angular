@@ -75,7 +75,7 @@ export class HyperledgerService {
     return this.http.post(resource_url, data, {withCredentials: true});
   }
 
-  //4. AddEvidence transaction of the blockchain -
+  //4. AddEvidence transaction of the blockchain
   postAddEvidence(evd_id:string, hash:string, hash_type:string, description:string, extension:string, case_id:string){
     let data = {
       evidence_id: evd_id,
@@ -87,7 +87,25 @@ export class HyperledgerService {
     };
     let resource_url = `${API_ENDPOINT}${NETWORK_NAMESPACE}AddEvidence`;
     return this.http.post(resource_url, data, {withCredentials: true});
+  }
 
+  //5. TransferEvidence transaction of the blockchain
+  postTransferEvidence(evidence_id:string, participant_type:string, participant_id:string){
+    let data = {
+      evidence_id: evidence_id,
+      participant_type: participant_type,
+      participant_id: participant_id
+    };
+    let resource_url = `${API_ENDPOINT}${NETWORK_NAMESPACE}TransferEvidence`;
+    return this.http.post(resource_url, data, {withCredentials: true});
+  }
+
+  //AUXILIAR METHODS
+  isDeposit(participant_id:string): boolean{
+    if(participant_id === "0001"){
+      return true;
+    }
+    return false;
   }
 }
 

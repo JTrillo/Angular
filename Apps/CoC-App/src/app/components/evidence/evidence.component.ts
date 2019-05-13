@@ -1,10 +1,9 @@
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { Observable } from 'rxjs';
 
 import { UserDataService } from 'src/app/services/user-data.service';
-import { Evidence} from 'src/app/services/hyperledger.service';
+import { HyperledgerService, Evidence } from 'src/app/services/hyperledger.service';
 
 import { AngularFireStorage } from '@angular/fire/storage';
 
@@ -24,13 +23,14 @@ export class EvidenceComponent implements OnInit {
   participant_id:string; //Id of participant who is going to receive the evidence
   noSelected:boolean;
 
-  downloadUrl: Observable<string | null>;
+  transferring:boolean;
 
   constructor(private activatedroute:ActivatedRoute,
               private userdata:UserDataService,
               private location:Location,
               private router:Router,
-              private storage:AngularFireStorage) {
+              private storage:AngularFireStorage,
+              private hyperledger:HyperledgerService) {
     this.activatedroute.params.subscribe(params => {
       let evidence_id = params['evi_id'];
       this.evidence = this.userdata.getEvidence(evidence_id);
@@ -39,6 +39,8 @@ export class EvidenceComponent implements OnInit {
     });
     this.participant_id = undefined;
     this.noSelected = false;
+
+    this.transferring = false;
   }
 
   ngOnInit() {
@@ -56,20 +58,33 @@ export class EvidenceComponent implements OnInit {
   transferEvidence(){
     if(this.participant_id!=undefined){
       console.log(`Transfer evidence to: ${this.participant_id}`);
-      //TO DO --> Llamar a la transacción del chaincode 'TransferEvidence'
-      //TO DO --> Recuperar los nuevos casos y pruebas del usuario
-      jQuery('#transferModal').modal('hide');
-      this.router.navigate(['/home']);
+      let participant_type = this.hyperledger.isDeposit(this.participant_id) ? 'DEPOSIT' : 'AGENT';
+      //Llamar a la transacción del chaincode 'TransferEvidence'
+      this.transferring = true;
+      this.hyperledger.postTransferEvidence(this.evidence.identifier, participant_type, this.participant_id).subscribe(response =>{
+        this.transferring = false;
+        //Eliminar la prueba del servicio user data
+        this.userdata.transferEvidence(this.evidence.identifier);
+        //Cerrar el modal y navegar al home
+        jQuery('#transferModal').modal('hide');
+        this.router.navigate(['/home']);
+      });
     }else{
       this.noSelected = true;
     }
   }
 
   downloadCopy(){
-    console.log("downloadCopy pressed");
     const path = `${this.evidence.case.identifier}/${this.evidence.identifier}.${this.evidence.extension}`;
     const ref = this.storage.ref(path);
-    this.downloadUrl = ref.getDownloadURL();
+    ref.getDownloadURL().subscribe(response =>{
+      let a = document.createElement("a");
+      a.href = response;
+      a.target = "_blank";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    })
   }
 
   goBack(){

@@ -19,12 +19,15 @@
         <div class="form-group row">
             <label class="col-md-2 col-form-label">Opening date</label>
             <div class="col-md-4">
-                <input class="form-control" type="date" [value]="openingDate" disabled>
+                <input class="form-control" type="text" [value]="case.openingDate | date: 'dd/MM/yyyy HH:mm:ss z'" disabled>
             </div>
 
             <label class="col-md-2 col-form-label">Closure date</label>
-            <div class="col-md-4">
-                <input class="form-control" type="date" [value]="closureDate" formControlName="closureDate" [min]="openingDate" [max]="today" [disabled]="closed">
+            <div class="col-md-4" *ngIf="!closed">
+                <input class="form-control" type="date" [value]="closureDate" formControlName="closureDate" [min]="openingDate" [max]="today">
+            </div>
+            <div class="col-md-4" *ngIf="closed">
+                <input class="form-control" type="text" [value]="case.closureDate | date: 'dd/MM/yyyy HH:mm:ss z'" disabled>
             </div>
         </div>
 
@@ -37,8 +40,11 @@
 
         <div class="form-group row">
             <label class="col-md-2 col-form-label">Resolution</label>
-            <div class="col-md-10">
-                <textarea class="form-control" placeholder="Enter a resolution" formControlName="resolution" [disabled]="closed">{{case.resolution}}</textarea>
+            <div class="col-md-10" *ngIf="!closed">
+                <textarea class="form-control" placeholder="Enter a resolution" formControlName="resolution"></textarea>
+            </div>
+            <div class="col-md-10" *ngIf="closed">
+                <textarea class="form-control" disabled>{{case.resolution}}</textarea>
             </div>
         </div>
 
@@ -98,7 +104,8 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let participant of participants">
-                                <td><a [routerLink]="['/profile', participant]">{{participant}}</a></td>
+                                <td *ngIf="!isDeposit(participant)"><a [routerLink]="['/profile', participant]">{{participant}}</a></td>
+                                <td *ngIf="isDeposit(participant)">{{participant}} (Deposit)</td>
                             </tr>
                         </tbody>
                     </table>

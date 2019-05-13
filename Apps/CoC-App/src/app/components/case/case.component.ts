@@ -51,7 +51,7 @@ export class CaseComponent implements OnInit {
     });
     
     this.openingDate = this.dateToInputDate(this.case.openingDate);
-    if(this.case.closureDate!=undefined){
+    if(!isNaN(this.case.closureDate.getTime())){
       this.closureDate = this.dateToInputDate(this.case.closureDate);
     }else{
       this.closureDate = this.today;
@@ -69,8 +69,8 @@ export class CaseComponent implements OnInit {
 
     //FORM
     this.form = new FormGroup({
-      'closureDate': new FormControl({value:'', disabled: this.case.status == 'CLOSED'}, Validators.required),
-      'resolution': new FormControl({value:this.case.resolution, disabled: this.case.status == 'CLOSED'}, Validators.required),
+      'closureDate': new FormControl('', Validators.required),
+      'resolution': new FormControl('', Validators.required),
       'newParticipantId': new FormControl('')
     });
 
@@ -157,6 +157,10 @@ export class CaseComponent implements OnInit {
       //this.cleanSelected();
       this.router.navigate(['/case',this.case.identifier]);
     });
+  }
+
+  isDeposit(participant_id:string):boolean{
+    return this.hyperledger.isDeposit(participant_id);
   }
 
   goBack(){
