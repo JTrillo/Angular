@@ -15,7 +15,9 @@ export class HomeComponent implements OnInit {
   no_evidences: boolean;
 
   constructor(private userdata: UserDataService) {
-    this.cases = this.userdata.getUserCases();
+    this.cases = this.userdata.getUserCases().filter(value=>{
+      return value.status === 'OPENED';
+    });
     this.no_cases = this.cases.length > 0 ? false : true;
     this.evidences = this.userdata.getUserEvidences();
     this.no_evidences = this.evidences.length > 0 ? false : true;

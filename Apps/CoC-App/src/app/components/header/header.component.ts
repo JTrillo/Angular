@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { AuthService } from 'src/app/services/auth.service';
 import { UserDataService } from 'src/app/services/user-data.service';
@@ -18,7 +19,8 @@ export class HeaderComponent implements OnInit {
   form:FormGroup;
 
   constructor(private auth:AuthService,
-              private userdata:UserDataService) {
+              private userdata:UserDataService,
+              private router:Router) {
 
     this.form = new FormGroup({
       'keyword': new FormControl('', Validators.required)
@@ -50,7 +52,7 @@ export class HeaderComponent implements OnInit {
   }
 
   search(){
-    console.log(this.form.value.keyword);
+    this.router.navigate(['/search', this.form.value.keyword.toUpperCase()]);
   }
 
 }

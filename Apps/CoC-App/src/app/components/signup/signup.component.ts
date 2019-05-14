@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
-import { Router } from '@angular/router';
-import { AngularFirestore } from '@angular/fire/firestore';
+
+import { FirebaseService } from '../../services/firebase.service';
 
 @Component({
   selector: 'app-signup',
@@ -11,11 +11,12 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class SignupComponent implements OnInit {
 
   form:FormGroup;
+  added:boolean;
 
-  constructor(private router:Router,
-              private db:AngularFirestore) {
+  constructor(private firebase:FirebaseService) {
     this.form = new FormGroup({
       'email': new FormControl('', [Validators.required, Validators.email]),
+      'github': new FormControl('', Validators.required),
       'firstname': new FormControl('', Validators.required),
       'lastname': new FormControl('', Validators.required),
       'birthdate': new FormControl('', Validators.required),
@@ -24,22 +25,19 @@ export class SignupComponent implements OnInit {
       'studies': new FormControl('', Validators.required),
       'office': new FormControl('', Validators.required),
     });
+
+    this.added = false;
   }
 
   ngOnInit() {
   }
 
   sendRequest(){
-    this.db.collection("new_users").add({
-      email: this.form.value.email,
-      firstname: this.form.value.firstname,
-      lasttname: this.form.value.lastname,
-      birthdate: this.form.value.birthdate,
-      gender: this.form.value.gender,
-      job: this.form.value.job,
-      studies: this.form.value.studies,
-      office: this.form.value.office
-    }).then(docRef => {
+    this.firebase.addRequest(this.form.value.email, this.form.value.github, this.form.value.firstname,
+                             this.form.value.lastname, this.form.value.birthdate, this.form.value.gender,
+                             this.form.value.job, this.form.value.studies, this.form.value.office) 
+    .then(docRef => {
+      this.added = true;
       console.log(`Document added with ID: ${docRef.id}`);
     }).catch(err => {
       console.error(`Error adding document: ${err}`);

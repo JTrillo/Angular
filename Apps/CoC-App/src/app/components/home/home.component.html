@@ -5,7 +5,7 @@
             <h1>My opened cases</h1>
             <hr>
             <div class="row">
-                <div class="column" *ngFor="let case of cases">
+                <div class="column" *ngFor="let case of cases | slice:0:3">
                     <div class="card" style="width: 23rem;">
                         <div class="card-body">
                             <h5 align="center" style="text-transform: uppercase;" class="card-title">{{case.identifier}} <b *ngIf="case.status !== 'OPENED'">(CLOSED)</b></h5>
@@ -15,7 +15,7 @@
                     </div>
                 </div>
                 <div class="alert alert-info col-md-12" role="alert" *ngIf="no_cases">
-                    <b>You are not participating in any case.</b>
+                    <b>You are not participating in any opened case.</b>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
             <h1>My evidences</h1>
             <hr>
             <div class="row">
-                <div class="column" *ngFor="let evidence of evidences">
+                <div class="column" *ngFor="let evidence of evidences | slice:0:3">
                     <div class="card" style="width: 23rem;">
                         <div class="card-body">
                             <h5 align="center" style="text-transform: uppercase;" class="card-title">{{evidence.identifier}}</h5>

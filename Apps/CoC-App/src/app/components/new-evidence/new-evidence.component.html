@@ -84,7 +84,7 @@
 
         <div class="form-group row" [hidden]="!end">
             <div class="alert alert-success col-md-12" role="alert" (click)="goHome()">
-                <b>Evidence {{form.value.identifier}} added succesfully. Click here to return to the home page.</b>
+                <b>Evidence {{form.value.identifier | uppercase}} added succesfully. Click here to return to the home page.</b>
             </div>
         </div>
     </div>

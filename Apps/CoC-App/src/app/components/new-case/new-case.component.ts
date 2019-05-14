@@ -29,10 +29,10 @@ export class NewCaseComponent implements OnInit {
   }
   
   addCase(){
-    console.log( this.form.value );
+    //console.log( this.form.value );
     this.loading = true;
     //Llamar a la transacción del chaincode 'OpenCase'
-    this.hyperledger.postNewCase(this.form.value.identifier, this.form.value.description).subscribe(response =>{
+    this.hyperledger.postNewCase(this.form.value.identifier.toUpperCase(), this.form.value.description).subscribe(response =>{
       console.log(response);
       //Add new case to user data service
       let curr_user_id = this.userdata.getUserProfile().identifier;

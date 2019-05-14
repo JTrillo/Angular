@@ -1,0 +1,56 @@
+<div>
+    <h1>Search results for <b>{{keyword}}</b></h1>
+    <hr>
+
+    <div class="form-group row">
+        <div class="table table-responsive" *ngIf="cases.length > 0">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Case ID</th>
+                        <th>Status</th>
+                        <th>Opened/Close since</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let case of cases">
+                        <td><a [routerLink]="['/case', case.identifier]">{{case.identifier}}</a></td>
+                        <td>{{case.status}}</td>
+                        <td *ngIf="case.status === 'OPENED'">{{case.openingDate | date: 'dd/MM/yyyy HH:mm:ss z'}}</td>
+                        <td *ngIf="case.status !== 'OPENED'">{{case.closureDate | date: 'dd/MM/yyyy HH:mm:ss z'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="alert alert-info col-12" role="alert" *ngIf="cases.length === 0" style="margin-top: 1%;">
+            <strong>Any of your cases match the term <i>{{keyword}}</i></strong>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="table table-responsive" *ngIf="evidences.length > 0">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Evidence ID</th>
+                        <th>Case ID</th>
+                        <th>Addition date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let evidence of evidences">
+                        <td><a [routerLink]="['/evidence', evidence.identifier]">{{evidence.identifier}}</a></td>
+                        <td>{{evidence.case.identifier}}</td>
+                        <td>{{evidence.additionDate | date: 'dd/MM/yyyy HH:mm:ss z'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="alert alert-info col-12" role="alert" *ngIf="evidences.length === 0" style="margin-top: 1%;">
+            <strong>Any of your evidences match the term <i>{{keyword}}</i></strong>
+        </div>
+    </div>
+
+</div>

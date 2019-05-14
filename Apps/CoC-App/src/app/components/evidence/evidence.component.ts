@@ -4,8 +4,7 @@ import { Location } from '@angular/common';
 
 import { UserDataService } from 'src/app/services/user-data.service';
 import { HyperledgerService, Evidence } from 'src/app/services/hyperledger.service';
-
-import { AngularFireStorage } from '@angular/fire/storage';
+import { FirebaseService } from '../../services/firebase.service';
 
 declare var jQuery:any; //To import jQuery
 
@@ -29,7 +28,7 @@ export class EvidenceComponent implements OnInit {
               private userdata:UserDataService,
               private location:Location,
               private router:Router,
-              private storage:AngularFireStorage,
+              private firebase:FirebaseService,
               private hyperledger:HyperledgerService) {
     this.activatedroute.params.subscribe(params => {
       let evidence_id = params['evi_id'];
@@ -76,8 +75,7 @@ export class EvidenceComponent implements OnInit {
 
   downloadCopy(){
     const path = `${this.evidence.case.identifier}/${this.evidence.identifier}.${this.evidence.extension}`;
-    const ref = this.storage.ref(path);
-    ref.getDownloadURL().subscribe(response =>{
+    this.firebase.getEvidenceCopy(path).subscribe(response =>{
       let a = document.createElement("a");
       a.href = response;
       a.target = "_blank";

@@ -15,6 +15,7 @@ import { CaseComponent } from './components/case/case.component';
 import { EvidenceComponent } from './components/evidence/evidence.component';
 import { NewEvidenceComponent } from './components/new-evidence/new-evidence.component';
 import { SignupComponent } from './components/signup/signup.component';
+import { SearchComponent } from './components/search/search.component';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -34,7 +35,8 @@ import { environment } from '../environments/environment';
     CaseComponent,
     EvidenceComponent,
     NewEvidenceComponent,
-    SignupComponent
+    SignupComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,

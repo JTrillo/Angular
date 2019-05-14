@@ -66,7 +66,7 @@ export class NewEvidenceComponent implements OnInit {
 
   addEvidence(){
     console.log( this.form.value );
-    let identifier = this.form.value.identifier;
+    let identifier = this.form.value.identifier.toUpperCase();
     let hash = this.form.value.hash_value;
     let hash_type = this.form.value.hash_type;
     let description = this.form.value.description;
