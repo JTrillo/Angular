@@ -1,0 +1,11 @@
+<div>
+    <mat-form-field size="50px">
+        <input matInput placeholder="Email" [formControl]="email">
+        <mat-hint>You must enter an email</mat-hint>
+        <mat-error *ngIf="!email.valid || emailError"><b>Please enter a valid email address</b></mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" style="margin-left: 8px;" [disabled]="emailSent" (click)="sendEmailLink()">Send</button>
+</div>
+<div class="alert alert-success col-md-4" role="alert" style="margin-top:2%;" *ngIf="emailSent">
+    Email sent to <b>{{email.value}}</b>
+</div>
