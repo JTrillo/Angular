@@ -2,7 +2,9 @@
     <mat-toolbar-row>
         Chain of Custody Administration App
         <span style="flex: 1 1 auto;"></span>
-        <button mat-icon-button (click)="logout()">
+        <span>{{user.email}}</span>
+        <span *ngIf="display !== ''">Logged as {{display}}</span>
+        <button mat-icon-button (click)="logout()" *ngIf="user | async">
             <mat-icon>logout</mat-icon>
         </button>
     </mat-toolbar-row>

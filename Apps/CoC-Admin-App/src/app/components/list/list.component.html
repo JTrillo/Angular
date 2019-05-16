@@ -1,0 +1,88 @@
+<mat-card width="100%;">
+    <mat-card-header>
+        <mat-card-title>New users requests</mat-card-title>
+        <mat-card-subtitle>You can accept or cancel them</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource" width="100%;">
+
+                <!-- Email Column -->
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef> Email </th>
+                    <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+                </ng-container>
+
+                <!-- Github Column -->
+                <ng-container matColumnDef="github">
+                    <th mat-header-cell *matHeaderCellDef> Github ID </th>
+                    <td mat-cell *matCellDef="let element"><a [href]="'https://github.com/' + element.github" target="_blank">{{element.github}}</a></td>
+                </ng-container>
+
+                <!-- Firstname Column -->
+                <ng-container matColumnDef="firstname">
+                    <th mat-header-cell *matHeaderCellDef> Firstname </th>
+                    <td mat-cell *matCellDef="let element"> {{element.firstname}} </td>
+                </ng-container>
+
+                <!-- Lastname Column -->
+                <ng-container matColumnDef="lastname">
+                    <th mat-header-cell *matHeaderCellDef> Lastname </th>
+                    <td mat-cell *matCellDef="let element"> {{element.lastname}} </td>
+                </ng-container>
+
+                <!-- Gender Column -->
+                <ng-container matColumnDef="gender">
+                    <th mat-header-cell *matHeaderCellDef> Gender </th>
+                    <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
+                </ng-container>
+
+                <!-- Birthdate Column -->
+                <ng-container matColumnDef="birthdate">
+                    <th mat-header-cell *matHeaderCellDef> Birthdate </th>
+                    <td mat-cell *matCellDef="let element"> {{element.birthdate}} </td>
+                </ng-container>
+
+                <!-- Job Column -->
+                <ng-container matColumnDef="job">
+                    <th mat-header-cell *matHeaderCellDef> Job Position </th>
+                    <td mat-cell *matCellDef="let element"> {{element.job}} </td>
+                </ng-container>
+
+                <!-- Studies Column -->
+                <ng-container matColumnDef="studies">
+                    <th mat-header-cell *matHeaderCellDef> Studies </th>
+                    <td mat-cell *matCellDef="let element"> {{element.studies}} </td>
+                </ng-container>
+
+                <!-- Office Column -->
+                <ng-container matColumnDef="office">
+                    <th mat-header-cell *matHeaderCellDef> Office </th>
+                    <td mat-cell *matCellDef="let element"> {{element.office}} </td>
+                </ng-container>
+
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="toggleOne()">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = $index;">
+                        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)" [aria-label]="toggleOne(row, i)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-raised-button color="primary" style="margin: 16px 8px;" [disabled]="selectedRows() !== 1" (click)="acceptRequest()"> Accept request </button>
+        <button mat-raised-button color="warn" style="margin: 16px 8px;" [disabled]="selectedRows() !== 1" (click)="cancelRequest()"> Cancel request </button>
+        <button mat-raised-button color="warn" style="margin: 16px 8px;" [disabled]="selectedRows() === 1 || selectedRows() === 0" (click)="cancelMultipleRequests()"> Cancel selected requests </button>
+    </mat-card-actions>
+</mat-card>

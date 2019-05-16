@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { FirebaseService } from '../../services/firebase.service';
 
 @Component({
   selector: 'app-header',
@@ -6,14 +9,29 @@ import { Component, OnInit } from '@angular/core';
   styles: []
 })
 export class HeaderComponent implements OnInit {
+  user;
+  display:string="";
 
-  constructor() { }
+  constructor(private firebase:FirebaseService, private router:Router) {
+    this.user = this.firebase.userAuthenticated();
+    this.firebase.userAuthenticated().subscribe(response=>{
+      if(response !== null){
+        let email = response.email;
+        this.firebase.getAdmin(email).subscribe(admin=>{
+          this.display = `${admin['lastname']}, ${admin['firstname']} (${email})`;
+        });
+      }
+    });
+  }
 
   ngOnInit() {
   }
 
   logout(){
-    console.log("Logout button clicked!!");
+    this.firebase.logout().then(response=>{
+      this.display = "";
+      this.router.navigate(['/login']);
+    });
   }
 
 }
