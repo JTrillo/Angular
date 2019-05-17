@@ -18,6 +18,10 @@ export class FirebaseService {
     return this.db.collection('requests').valueChanges();
   }
 
+  deleteRequest(email:string){
+    return this.db.collection('requests').doc(email).delete();
+  }
+
   sendEmailLink(email:string){
     //Prepare things to send email
     let actionCodeSettings = {

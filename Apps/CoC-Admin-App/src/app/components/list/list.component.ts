@@ -4,6 +4,7 @@ import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 
 import { FirebaseService, Request } from '../../services/firebase.service';
+import { HyperledgerService } from '../../services/hyperledger.service';
 
 @Component({
   selector: 'app-list',
@@ -18,7 +19,7 @@ export class ListComponent{
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private firebase:FirebaseService, private router:Router) {
+  constructor(private firebase:FirebaseService, private router:Router, private hyperledger:HyperledgerService) {
     this.firebase.getRequests().subscribe(response=>{
       this.requests = [];
       response.forEach(element=>{
@@ -67,17 +68,75 @@ export class ListComponent{
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${position}`;
   }
 
-  //Accept request
+  //Accept one request
   acceptRequest(){
     let selected:Request = this.selection.selected[0];
+    console.log(selected);
+    //If request is accepted, we have to create the agent
+    this.hyperledger.createAgent(selected.firstname, selected.lastname, selected.birthdate, selected.gender,
+      selected.job, selected.studies, selected.office, selected.github).subscribe(response=>{
+        console.log(response);
+        //Then we have to issue the identity
+        this.hyperledger.issueIdentity(selected.github).subscribe(response2=>{
+          console.log(response2);
+          let blob = response2;
+          let url = window.URL.createObjectURL(blob);
+          window.open(url);
+          //Delete request from Firestore
+          this.firebase.deleteRequest(selected.email).then(response3=>{
+            console.log(response3);
+            //Send email
+            this.sendMail(`${selected.firstname} ${selected.lastname}`, selected.email, true);
+            this.router.navigate(['/list']);
+          });
+        });
+    });
+    
   }
 
-  //Cancel request
-  cancelRequest(){
+  //Decline one request
+  declineRequest(){
     let selected:Request = this.selection.selected[0];
+    //Delete request from Firestore
+    this.firebase.deleteRequest(selected.email).then(response=>{
+      console.log(response);
+      //Send email - TO DO --> Modal to ask a reason
+      this.sendMail(`${selected.firstname} ${selected.lastname}`, selected.email, false, "Reason: your Github ID does not exist.");
+    });
   }
 
-  cancelMultipleRequests(){
+  //Decline more than one request
+  declineMultipleRequests(){
     let selected:Request[] = this.selection.selected;
+    selected.forEach(element=>{
+      //Delete request from Firestore
+      this.firebase.deleteRequest(element.email).then(response=>{
+        console.log(response);
+        //Send email
+        this.sendMail(`${element.firstname} ${element.lastname}`, element.email, false, "Reason: your Github ID does not exist.");
+      });
+    });
   }
+
+  sendMail(name:string, receiver:string, accepted:boolean, reason?:string){
+    let subject = "";
+    let body = `Dear ${name},\r\n`;
+    if(accepted){
+      subject = "Welcome to the Chain of Custody system";
+      body = "The attachment sent is necessary for the correct use of CoC Application." +
+      "\r\n" + "First time you sign in, you will have to upload this file.";
+    }else{
+      subject = "Your request has been declined";
+      body = reason;
+    }
+    body += "\r\n\r\n" + "Best Regards," +
+    "\r\n" + "CoC App Administration Team";
+
+    let link = `mailto:${receiver}`
+             + `?subject=${encodeURIComponent(subject)}`
+             + `&body=${encodeURIComponent(body)}`;
+
+    window.location.href = link;
+  }
+  
 }

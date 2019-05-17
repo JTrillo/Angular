@@ -1,7 +1,7 @@
 <mat-card width="100%;">
     <mat-card-header>
         <mat-card-title>New users requests</mat-card-title>
-        <mat-card-subtitle>You can accept or cancel them</mat-card-subtitle>
+        <mat-card-subtitle>You can accept or decline them</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
         <div class="mat-elevation-z8">
@@ -82,7 +82,7 @@
     </mat-card-content>
     <mat-card-actions>
         <button mat-raised-button color="primary" style="margin: 16px 8px;" [disabled]="selectedRows() !== 1" (click)="acceptRequest()"> Accept request </button>
-        <button mat-raised-button color="warn" style="margin: 16px 8px;" [disabled]="selectedRows() !== 1" (click)="cancelRequest()"> Cancel request </button>
-        <button mat-raised-button color="warn" style="margin: 16px 8px;" [disabled]="selectedRows() === 1 || selectedRows() === 0" (click)="cancelMultipleRequests()"> Cancel selected requests </button>
+        <button mat-raised-button color="warn" style="margin: 16px 8px;" [disabled]="selectedRows() !== 1" (click)="declineRequest()"> Decline request </button>
+        <button mat-raised-button color="warn" style="margin: 16px 8px;" [disabled]="selectedRows() === 1 || selectedRows() === 0" (click)="declineMultipleRequests()"> Decline selected requests </button>
     </mat-card-actions>
 </mat-card>

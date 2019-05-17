@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http'; 
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -30,6 +31,7 @@ import { ListComponent } from './components/list/list.component';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase), //necesary for any module
     AngularFirestoreModule, //only needed for database module
     AngularFireAuthModule, //only needed for storage module
