@@ -12,11 +12,11 @@ export class FirebaseService {
               private storage:AngularFireStorage) { }
   
   addRequest(email:string, github:string, firstname:string, lastname:string, birthdate:string, gender:string, job:string, studies:string, office:string){
-    return this.db.collection("new_users").add({
+    return this.db.collection("requests").add({
       email: email,
       github: github,
       firstname: firstname,
-      lasttname: lastname,
+      lastname: lastname,
       birthdate: birthdate,
       gender: gender,
       job: job,
