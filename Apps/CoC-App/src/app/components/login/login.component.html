@@ -1,4 +1,4 @@
-<div class="text-center">
+<div class="text-center" *ngIf="cardImport === 2">
     <div class="spinner-border" role="status">
         <span class="sr-only">Loading...</span>
     </div>
@@ -6,4 +6,7 @@
     <div class="progress">
         <div class="progress-bar progress-bar-striped" role="progressbar" [style.width.%]="pct" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
+</div>
+<div class="text-center" *ngIf="cardImport === 1">
+    <!--TO DO: simple form to retrieve user's card-->
 </div>

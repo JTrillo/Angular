@@ -44,6 +44,18 @@ export class HyperledgerService {
     return this.http.get(resource_url, {withCredentials: true});
   }
 
+  //Import one card to user's wallet
+  postImportCard(card:File, cardname:string){
+    let resource_url = `${API_ENDPOINT}wallet/import`;
+
+    const formData = new FormData();
+    formData.append('card', card);
+    const headers = new HttpHeaders();
+    headers.set('Content-Type', 'multipart/form-data');
+
+    return this.http.post(resource_url, formData, {withCredentials:true, headers});
+  }
+
   //1. OpenCase transaction of the blockchain - This tx creates a new case
   postNewCase(case_id:string, description:string){
     let data = {

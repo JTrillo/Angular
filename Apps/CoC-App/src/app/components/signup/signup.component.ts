@@ -38,7 +38,8 @@ export class SignupComponent implements OnInit {
                              this.form.value.job, this.form.value.studies, this.form.value.office) 
     .then(docRef => {
       this.added = true;
-      console.log(`Document added with ID: ${docRef.id}`);
+      console.log(docRef);
+      console.log(`Document added with ID: ${docRef}`);
     }).catch(err => {
       console.error(`Error adding document: ${err}`);
     });

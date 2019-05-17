@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit {
 
   pct:Number;
   msg:string;
+  cardImport=0; //0 --> initial value, 1 --> No cards in user's wallet, 2 --> At least one card in user's wallet
 
   constructor(private hyperledger:HyperledgerService,
               private userdata:UserDataService,
@@ -21,30 +22,37 @@ export class LoginComponent implements OnInit {
     this.pct = 0;
     this.msg = "Loading your profile";
     this.hyperledger.getWallet().subscribe(response=>{
-      //Get user profile
-      let participantId = response[0]['name'];
-      this.hyperledger.getProfile(participantId).subscribe(profile=>{
-        this.setProfile(profile);
-        this.pct = 33;
-        this.msg = "Loading your cases";
-        //Get user cases
-        this.hyperledger.getUserCases(participantId).subscribe(cases=>{
-          if(cases['length'] > 0){
-            this.setCases(cases);
-          }
-          this.pct = 67;
-          this.msg = "Loading your evidences";
-          //Get user evidences
-          this.hyperledger.getUserEvidences(participantId).subscribe(evidences=>{
-            if(evidences['length'] > 0){
-              this.setEvidences(evidences);
+      if(response['length'] > 0){ //EXISTS AT LEAST ONE CARD IN USER'S WALLET
+        this.cardImport = 2;
+        //Get user profile
+        let participantId = response[0]['name'];
+        this.hyperledger.getProfile(participantId).subscribe(profile=>{
+          this.setProfile(profile);
+          this.pct = 33;
+          this.msg = "Loading your cases";
+          //Get user cases
+          this.hyperledger.getUserCases(participantId).subscribe(cases=>{
+            if(cases['length'] > 0){
+              this.setCases(cases);
             }
-            this.pct = 100;
-            //Navigate home page
-            this.router.navigate(['/home'])
+            this.pct = 67;
+            this.msg = "Loading your evidences";
+            //Get user evidences
+            this.hyperledger.getUserEvidences(participantId).subscribe(evidences=>{
+              if(evidences['length'] > 0){
+                this.setEvidences(evidences);
+              }
+              this.pct = 100;
+              //Navigate home page
+              this.router.navigate(['/home'])
+            })
           })
-        })
-      });
+        });
+      }else{ //THERE ARE NO CARD IN USER'S WALLET
+      this.cardImport = 1;
+        //We have to store one card in user's wallet
+        //this.hyperledger.postImportCard();
+      }
     });
   }
 
