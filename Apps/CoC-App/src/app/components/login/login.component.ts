@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormControl, Validators } from '@angular/forms';
 
 import { HyperledgerService, Profile, Case, Evidence, Owner } from '../../services/hyperledger.service';
 import { UserDataService } from '../../services/user-data.service';
+
 
 @Component({
   selector: 'app-login',
@@ -14,6 +16,12 @@ export class LoginComponent implements OnInit {
   pct:Number;
   msg:string;
   cardImport=0; //0 --> initial value, 1 --> No cards in user's wallet, 2 --> At least one card in user's wallet
+
+  card:FormControl;
+  file:File;
+  filename:string = "Choose a card";
+  uploading:boolean;
+  uploaded:boolean;
 
   constructor(private hyperledger:HyperledgerService,
               private userdata:UserDataService,
@@ -49,14 +57,30 @@ export class LoginComponent implements OnInit {
           })
         });
       }else{ //THERE ARE NO CARD IN USER'S WALLET
-      this.cardImport = 1;
-        //We have to store one card in user's wallet
-        //this.hyperledger.postImportCard();
+        this.cardImport = 1;
+        this.card = new FormControl('', Validators.required);
+        this.uploading = false;
+        this.uploaded = false;
       }
     });
   }
 
   ngOnInit() { }
+
+  uploadCard(){
+    //We have to store one card in user's wallet
+    this.uploading = true;
+    this.hyperledger.postImportCard(this.file, this.filename).subscribe(response=>{
+      console.log(response);
+      this.uploading = false;
+      this.uploaded = true;
+    });
+  }
+
+  getFile(event: FileList){
+    this.file = event.item(0);
+    this.filename = this.file.name;
+  }
 
   private setProfile(response){
     let profile:Profile = {
