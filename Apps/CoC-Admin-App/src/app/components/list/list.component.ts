@@ -102,6 +102,7 @@ export class ListComponent{
       console.log(response);
       //Send email - TO DO --> Modal to ask a reason
       this.sendMail(`${selected.firstname} ${selected.lastname}`, selected.email, false, "Reason: your Github ID does not exist.");
+      this.router.navigate(['/list']);
     });
   }
 
@@ -114,6 +115,7 @@ export class ListComponent{
         console.log(response);
         //Send email
         this.sendMail(`${element.firstname} ${element.lastname}`, element.email, false, "Reason: your Github ID does not exist.");
+        this.router.navigate(['/list']);
       });
     });
   }

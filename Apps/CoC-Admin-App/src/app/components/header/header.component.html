@@ -1,11 +1,8 @@
-<mat-toolbar color="primary">
-    <mat-toolbar-row>
-        Chain of Custody Administration App
-        <span style="flex: 1 1 auto;"></span>
-        <span>{{user.email}}</span>
-        <span *ngIf="display !== ''">Logged as {{display}}</span>
-        <button mat-icon-button (click)="logout()" *ngIf="user | async">
-            <mat-icon>logout</mat-icon>
-        </button>
-    </mat-toolbar-row>
-</mat-toolbar>
+<nav class="navbar navbar-dark bg-dark justify-content-between">
+    <span class="navbar-brand mb-0 h1">Chain of Custody Administration App</span>
+
+    <span class="navbar-text" *ngIf="display !== ''">
+        Logged as: {{display}}
+        <button type="button" class="btn btn-sm btn-light" (click)="logout()">Sign out</button>
+    </span>
+</nav>

@@ -7,7 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
 
-  constructor() { }
+  year:number;
+  name:string = "Joaquín Trillo Escribano";
+  company:string = "Grupo de investigación ERTIS. Universidad de Málaga";
+
+  constructor() {
+    let date = new Date();
+    this.year = date.getFullYear();
+  }
 
   ngOnInit() {
   }

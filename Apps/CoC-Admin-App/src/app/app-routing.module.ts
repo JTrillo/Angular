@@ -7,7 +7,7 @@ import { ListComponent } from './components/list/list.component';
 const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'list', component: ListComponent},
-  { path: '**', pathMatch:'full', redirectTo: 'login' } //default route
+  { path: '**', pathMatch:'full', redirectTo: 'list' } //default route
 ];
 
 @NgModule({

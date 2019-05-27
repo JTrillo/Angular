@@ -14,3 +14,19 @@ body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+footer {
+    color: white;
+    position: fixed;
+    bottom: 0px;
+    width: stretch;
+    height: 150px;
+}
+
+.imageFooter {
+    width: 80px;
+}
+
+.imageFooter2 {
+    width: 200px;
+}
