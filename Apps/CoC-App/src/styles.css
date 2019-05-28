@@ -2,7 +2,7 @@
 
 .routerOutlet {
     margin-top: 20px;
-    padding-bottom: 60px;
+    margin-bottom: 20px;
 }
 
 .loginDiv,
@@ -14,10 +14,17 @@
 
 footer {
     color: white;
-    position: fixed;
     bottom: 0px;
     width: stretch;
-    height: 50px;
+    height: 150px;
+}
+
+.imageFooter {
+    width: 80px;
+}
+
+.imageFooter2 {
+    width: 200px;
 }
 
 hr {

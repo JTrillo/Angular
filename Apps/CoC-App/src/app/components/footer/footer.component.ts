@@ -9,7 +9,7 @@ export class FooterComponent implements OnInit {
 
   year:number;
   name:string = "Joaquín Trillo Escribano";
-  company:string = "Universidad de Málaga";
+  company:string = "Grupo de investigación ERTIS. Universidad de Málaga";
 
   constructor() {
     let date = new Date();
