@@ -9,27 +9,14 @@ import { FirebaseService } from '../../services/firebase.service';
   styles: []
 })
 export class HeaderComponent implements OnInit {
-  user;
-  display:string="";
 
-  constructor(private firebase:FirebaseService, private router:Router) {
-    this.user = this.firebase.userAuthenticated();
-    this.firebase.userAuthenticated().subscribe(response=>{
-      if(response !== null){
-        let email = response.email;
-        this.firebase.getAdmin(email).subscribe(admin=>{
-          this.display = `${admin['lastname']}, ${admin['firstname']} (${email})`;
-        });
-      }
-    });
-  }
+  constructor(public firebase:FirebaseService, private router:Router) { }
 
   ngOnInit() {
   }
 
   logout(){
-    this.firebase.logout().then(response=>{
-      this.display = "";
+    this.firebase.logout().then(()=>{
       this.router.navigate(['/login']);
     });
   }

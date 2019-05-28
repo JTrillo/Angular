@@ -2,13 +2,27 @@ import { Injectable } from '@angular/core';
 
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
 
-  constructor(private db:AngularFirestore, private auth:AngularFireAuth) {}
+  user: Observable<Admin | null>;
+  
+  constructor(private db:AngularFirestore, private auth:AngularFireAuth) {
+    this.user = this.auth.authState.pipe(
+      switchMap(user => {
+        if(user){
+          return this.db.doc<Admin>(`admins/${user.email}`).valueChanges();
+        }else{
+          return of(null);
+        }
+      })
+    )
+  }
 
   getAdmin(email:string){
     return this.db.collection('admins').doc(email).valueChanges();
@@ -66,4 +80,10 @@ export interface Request{
   job:string,
   studies:string,
   office:string
+}
+
+interface Admin {
+  email: string,
+  firstname: string,
+  lastname:string
 }

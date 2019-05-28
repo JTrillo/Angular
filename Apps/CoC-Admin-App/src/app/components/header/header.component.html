@@ -1,8 +1,8 @@
-<nav class="navbar navbar-dark bg-dark justify-content-between">
+<nav class="navbar navbar-dark bg-dark justify-content-between fixed-top">
     <span class="navbar-brand mb-0 h1">Chain of Custody Administration App</span>
 
-    <span class="navbar-text" *ngIf="display !== ''">
-        Logged as: {{display}}
+    <span class="navbar-text" *ngIf="firebase.user | async as user">
+        Logged as: {{user.lastname}}, {{user.firstname}} ({{user.email}})
         <button type="button" class="btn btn-sm btn-light" (click)="logout()">Sign out</button>
     </span>
 </nav>

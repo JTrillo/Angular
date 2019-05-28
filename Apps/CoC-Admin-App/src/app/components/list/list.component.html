@@ -88,7 +88,64 @@
     </mat-card-content>
     <mat-card-actions>
         <button mat-raised-button color="primary" style="margin: 16px 8px;" [disabled]="selectedRows() !== 1" (click)="acceptRequest()"> Accept request </button>
-        <button mat-raised-button color="warn" style="margin: 16px 8px;" [disabled]="selectedRows() !== 1" (click)="declineRequest()"> Decline request </button>
-        <button mat-raised-button color="warn" style="margin: 16px 8px;" [disabled]="selectedRows() === 1 || selectedRows() === 0" (click)="declineMultipleRequests()"> Decline selected requests </button>
+        <button mat-raised-button color="warn" style="margin: 16px 8px;" [disabled]="selectedRows() !== 1" data-toggle="modal" data-target="#declineRequest"> Decline request </button>
+        <!-- Decline request modal -->
+        <div class="modal fade" id="declineRequest" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <!-- Header -->
+                    <div class="modal-header">
+                        <h5>Decline request</h5>
+                        <button type="button" class="close" data-dismiss="modal" (click)="resetVariable(false)">&times;</button>
+                    </div>
+                    <!-- Body -->
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label">Reason</label>
+                            <div class="col-md-10">
+                                <input id="declineReason" type="text" class="form-control" [formControl]="reason" placeholder="Github ID does not exist">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-primary" (click)="declineRequest()" [disabled]="!reason.valid">Decline</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <button mat-raised-button color="warn" style="margin: 16px 8px;" [disabled]="selectedRows() === 1 || selectedRows() === 0" data-toggle="modal" data-target="#declineMultipleRequests"> Decline selected requests </button>
+        <!-- Decline multiple requests modal -->
+        <div class="modal fade" id="declineMultipleRequests" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <!-- Header -->
+                    <div class="modal-header">
+                        <h5>Decline multiple requests</h5>
+                        <button type="button" class="close" data-dismiss="modal" (click)="resetVariable(true)">&times;</button>
+                    </div>
+                    <!-- Body -->
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label">Reason</label>
+                            <div class="col-md-10">
+                                <input id="declineMultipleReason" type="text" class="form-control" [formControl]="reason" placeholder="Github ID does not exist">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-primary" (click)="declineMultipleRequests()" [disabled]="!reason.valid">Decline</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </mat-card-actions>
 </mat-card>

@@ -1,10 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormControl, Validators } from '@angular/forms';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 
 import { FirebaseService, Request } from '../../services/firebase.service';
 import { HyperledgerService } from '../../services/hyperledger.service';
+
+declare var jQuery:any; //To import jQuery
 
 @Component({
   selector: 'app-list',
@@ -17,11 +20,13 @@ export class ListComponent{
   selection = new SelectionModel<Request>(true, []);
   requests:Request[];
 
+  reason:FormControl;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private firebase:FirebaseService, private router:Router, private hyperledger:HyperledgerService) {
+    this.requests = [];
     this.firebase.getRequests().subscribe(response=>{
-      this.requests = [];
       response.forEach(element=>{
         let request:Request = {
           email: element['email'],
@@ -39,6 +44,8 @@ export class ListComponent{
       this.dataSource = new MatTableDataSource<Request>(this.requests);
       this.dataSource.paginator = this.paginator;
     });
+
+    this.reason = new FormControl('', Validators.required);
   }
 
   //Quantity of rows selected
@@ -79,15 +86,34 @@ export class ListComponent{
         //Then we have to issue the identity
         this.hyperledger.issueIdentity(selected.github).subscribe(response2=>{
           console.log(response2);
-          let blob = response2;
-          let url = window.URL.createObjectURL(blob);
-          window.open(url);
+          //Download the card
+          let cardData = response2;
+          let filename = `${selected.github}@cocv2.card`;
+          let type = 'application/octet-stream';
+
+          var file = new Blob([cardData], {type: type});
+
+          if (window.navigator.msSaveOrOpenBlob) { //IE10+
+            window.navigator.msSaveOrOpenBlob(file, filename);
+          } else { //Other browsers
+              var url = window.URL.createObjectURL(file);
+              var a = document.createElement("a");
+              //a.id = identifier;
+              a.href = url;
+              a.download = filename;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              window.URL.revokeObjectURL(url);
+          }
+          
           //Delete request from Firestore
           this.firebase.deleteRequest(selected.email).then(response3=>{
             console.log(response3);
+            //Refresh
+            this.router.navigate(['/list']);
             //Send email
             this.sendMail(`${selected.firstname} ${selected.lastname}`, selected.email, true);
-            this.router.navigate(['/list']);
           });
         });
     });
@@ -100,24 +126,32 @@ export class ListComponent{
     //Delete request from Firestore
     this.firebase.deleteRequest(selected.email).then(response=>{
       console.log(response);
-      //Send email - TO DO --> Modal to ask a reason
-      this.sendMail(`${selected.firstname} ${selected.lastname}`, selected.email, false, "Reason: your Github ID does not exist.");
+      //Close modal
+      jQuery('#declineRequest').modal('hide');
+      //Refresh
       this.router.navigate(['/list']);
-    });
+      //Send email
+      this.sendMail(`${selected.firstname} ${selected.lastname}`, selected.email, false, `Reason: ${this.reason.value}`);
+    }); 
   }
 
   //Decline more than one request
   declineMultipleRequests(){
     let selected:Request[] = this.selection.selected;
+    //Close modal
+    jQuery('#declineMultipleRequests').modal('hide');
     selected.forEach(element=>{
       //Delete request from Firestore
       this.firebase.deleteRequest(element.email).then(response=>{
         console.log(response);
-        //Send email
-        this.sendMail(`${element.firstname} ${element.lastname}`, element.email, false, "Reason: your Github ID does not exist.");
+        //Refresh
         this.router.navigate(['/list']);
+        //Send email
+        this.sendMail(`${element.firstname} ${element.lastname}`, element.email, false, `Reason: ${this.reason.value}`);  
       });
     });
+    
+    
   }
 
   sendMail(name:string, receiver:string, accepted:boolean, reason?:string){
@@ -139,6 +173,16 @@ export class ListComponent{
              + `&body=${encodeURIComponent(body)}`;
 
     window.location.href = link;
+  }
+
+  resetVariable(multiple:true){
+    if(multiple){
+      (<HTMLInputElement>document.getElementById("declineMultipleReason")).value = "";
+      this.reason.setValue('');
+    }else{
+      (<HTMLInputElement>document.getElementById("declineReason")).value = "";
+      this.reason.setValue('');
+    }
   }
   
 }

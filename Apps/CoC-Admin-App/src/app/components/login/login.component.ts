@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit{
   ngOnInit() {
     const url = this.router.url;
     if(url.includes('signIn')){ //Esto quiere decir que el componente se ha inicializado gracias al link de autenticación
-      this.firebase.confirmSignIn(url).then(response=>{ //Si la confirmación tiene éxito, navegar al listado de requests
+      this.firebase.confirmSignIn(url).then(()=>{ //Si la confirmación tiene éxito, navegar al listado de requests
         window.localStorage.removeItem('emailCoCAdmin');
         this.router.navigate(['/list']);
       }).catch(err=>{
@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit{
       this.firebase.getAdmin(this.email.value).subscribe(response=>{
         if(response !== undefined){ //Email exists
           //Send link to admin email
-          this.firebase.sendEmailLink(this.email.value).then(response=>{
+          this.firebase.sendEmailLink(this.email.value).then(()=>{
             //Store email in local storage
             window.localStorage.setItem('emailCoCAdmin', this.email.value);
             this.emailError = false;
