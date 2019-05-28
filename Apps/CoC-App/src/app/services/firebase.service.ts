@@ -24,6 +24,10 @@ export class FirebaseService {
       office: office
     });
   }
+
+  checkRequest(email:string){
+    return this.db.collection("requests").doc(email).valueChanges();
+  }
   
   getCases(){
     return this.db.collection('cases').valueChanges();

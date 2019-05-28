@@ -10,56 +10,52 @@
         </div>
     </div>
 
-    <div class="col-md-6 offset-md-3 signupDiv">
+    <div class="col-md-8 offset-md-2 signupDiv">
         <div class="form-group row" style="margin-top:2%;">
-            <label class="col-md-3 col-form-label">Email</label>
-            <div class="col-md-9">
+            <label class="col-md-2 col-form-label">Email</label>
+            <div class="col-md-10">
                 <input type="email" class="form-control" placeholder="peter.dun@test.com" formControlName="email">
             </div>
+
+
         </div>
 
         <div class="form-group row">
-            <label class="col-md-3 col-form-label">Github ID</label>
-            <div class="col-md-9">
+            <label class="col-md-2 col-form-label">Github ID</label>
+            <div class="col-md-4">
                 <input type="text" class="form-control" placeholder="Your Github ID" formControlName="github">
             </div>
-        </div>
 
-        <div class="form-group row">
-            <label class="col-md-3 col-form-label">First name</label>
-            <div class="col-md-9">
+            <label class="col-md-2 col-form-label">First name</label>
+            <div class="col-md-4">
                 <input type="text" class="form-control" placeholder="Peter" formControlName="firstname">
             </div>
         </div>
 
         <div class="form-group row">
-            <label class="col-md-3 col-form-label">Last name</label>
-            <div class="col-md-9">
+            <label class="col-md-2 col-form-label">Last name</label>
+            <div class="col-md-4">
                 <input type="text" class="form-control" placeholder="Dun" formControlName="lastname">
             </div>
-        </div>
 
-        <div class="form-group row">
-            <label class="col-md-3 col-form-label">Birthdate</label>
-            <div class="col-md-9">
+            <label class="col-md-2 col-form-label">Birthdate</label>
+            <div class="col-md-4">
                 <input type="date" class="form-control" formControlName="birthdate">
             </div>
         </div>
 
         <div class="form-group row">
-            <label class="col-md-3 col-form-label">Gender</label>
-            <div class="col-md-9">
+            <label class="col-md-2 col-form-label">Gender</label>
+            <div class="col-md-4">
                 <select class="form-control" formControlName="gender">
-                    <option disabled selected value> -- Select one -- </option>
-                    <option value="MALE">Male</option>
-                    <option value="FEMALE">Female</option>
-                </select>
+                        <option disabled selected value> -- Select one -- </option>
+                        <option value="MALE">Male</option>
+                        <option value="FEMALE">Female</option>
+                    </select>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <label class="col-md-3 col-form-label">Job Position</label>
-            <div class="col-md-9">
+            <label class="col-md-2 col-form-label">Job Position</label>
+            <div class="col-md-4">
                 <select class="form-control" formControlName="job">
                     <option disabled select value> -- Select one -- </option>
                     <option value="DETECTIVE">Detective</option>
@@ -69,16 +65,16 @@
             </div>
         </div>
 
-        <div class="form-group row">
-            <label class="col-md-3 col-form-label">Studies</label>
-            <div class="col-md-9">
-                <input type="text" class="form-control" placeholder="Software Engineer" formControlName="studies">
-            </div>
-        </div>
+
 
         <div class="form-group row">
-            <label class="col-md-3 col-form-label">Office</label>
-            <div class="col-md-9">
+            <label class="col-md-2 col-form-label">Studies</label>
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Software Engineer" formControlName="studies">
+            </div>
+
+            <label class="col-md-2 col-form-label">Office</label>
+            <div class="col-md-4">
                 <select class="form-control" formControlName="office">
                     <option disabled select value> -- Select one -- </option>
                     <option value="Málaga">Málaga</option>
@@ -95,6 +91,12 @@
         <div class="form-group row" *ngIf="added" style="margin-left:2%; margin-right:2%;">
             <div class="alert alert-success col-md-12" role="alert">
                 <b>Your request has been sent. In a few days you will receive an answer.</b>
+            </div>
+        </div>
+
+        <div class="form-group row" *ngIf="requestExists" style="margin-left:2%; margin-right:2%;">
+            <div class="alert alert-warning col-md-12" role="alert">
+                <b>A request for the email {{form.value.email}} already exists</b>
             </div>
         </div>
     </div>
