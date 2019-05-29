@@ -1,8 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component} from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
-import { SelectionModel } from '@angular/cdk/collections';
 
 import { FirebaseService, Request } from '../../services/firebase.service';
 import { HyperledgerService } from '../../services/hyperledger.service';
@@ -15,18 +12,18 @@ declare var jQuery:any; //To import jQuery
   styles: []
 })
 export class ListComponent{
-  displayedColumns: string[] = ['email', 'github', 'firstname', 'lastname', 'birthdate', 'gender', 'job', 'studies', 'office', 'select'];
-  dataSource:MatTableDataSource<Request>;
-  selection = new SelectionModel<Request>(true, []);
   requests:Request[];
 
   reason:FormControl;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  numSelected:number=0;
+  selectedRows:number[]=[];
 
-  constructor(private firebase:FirebaseService, private router:Router, private hyperledger:HyperledgerService) {
+
+  constructor(private firebase:FirebaseService, private hyperledger:HyperledgerService) {
     this.requests = [];
     this.firebase.getRequests().subscribe(response=>{
+      this.requests = [];
       response.forEach(element=>{
         let request:Request = {
           email: element['email'],
@@ -41,43 +38,27 @@ export class ListComponent{
         };
         this.requests.push(request);
       });
-      this.dataSource = new MatTableDataSource<Request>(this.requests);
-      this.dataSource.paginator = this.paginator;
     });
 
     this.reason = new FormControl('', Validators.required);
   }
 
   //Quantity of rows selected
-  selectedRows():number{
-    let numSelected = this.selection.selected.length;
-    return numSelected;
-  }
-
-  //If selected rows is equal the number of rows, this method will return true
-  isAllSelected():boolean{
-    if(this.dataSource === undefined) return false;
-    return this.selectedRows() === this.dataSource.data.length;
-  }
-
-  //Select/deselect all rows
-  masterToggle() {
-    this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));
-  }
-
-  //Select/deselect one row
-  toggleOne(row?: Request, position?:number): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+  checkboxClicked(id:string){
+    if((<HTMLInputElement>document.getElementById(id)).checked){
+      this.numSelected = this.numSelected + 1;
+      this.selectedRows.push(+id);
+      this.selectedRows.sort();
+    }else{
+      this.numSelected = this.numSelected - 1;
+      this.selectedRows = this.selectedRows.filter(element => element !== +id);
+      this.selectedRows.sort();
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${position}`;
   }
 
   //Accept one request
   acceptRequest(){
-    let selected:Request = this.selection.selected[0];
+    let selected:Request = this.requests[this.selectedRows[0]];
     console.log(selected);
     //If request is accepted, we have to create the agent
     this.hyperledger.createAgent(selected.firstname, selected.lastname, selected.birthdate, selected.gender,
@@ -108,10 +89,11 @@ export class ListComponent{
           }
           
           //Delete request from Firestore
-          this.firebase.deleteRequest(selected.email).then(response3=>{
-            console.log(response3);
-            //Refresh
-            this.router.navigate(['/list']);
+          this.firebase.deleteRequest(selected.email).then(()=>{
+            //Delete request locally
+            this.requests = this.requests.filter(element => element.email !== selected.email);
+            this.selectedRows = [];
+            this.numSelected = 0;
             //Send email
             this.sendMail(`${selected.firstname} ${selected.lastname}`, selected.email, true);
           });
@@ -122,36 +104,42 @@ export class ListComponent{
 
   //Decline one request
   declineRequest(){
-    let selected:Request = this.selection.selected[0];
+    let selected:Request = this.requests[this.selectedRows[0]];
     //Delete request from Firestore
-    this.firebase.deleteRequest(selected.email).then(response=>{
-      console.log(response);
+    this.firebase.deleteRequest(selected.email).then(()=>{
+      //Delete request locally
+      this.requests = this.requests.filter(element => element.email !== selected.email);
+      this.selectedRows = [];
+      this.numSelected = 0;
       //Close modal
       jQuery('#declineRequest').modal('hide');
-      //Refresh
-      this.router.navigate(['/list']);
       //Send email
       this.sendMail(`${selected.firstname} ${selected.lastname}`, selected.email, false, `Reason: ${this.reason.value}`);
-    }); 
+    });
   }
 
   //Decline more than one request
   declineMultipleRequests(){
-    let selected:Request[] = this.selection.selected;
+    let selected:Request[] = [];
+    this.selectedRows.forEach(element =>{
+      selected.push(this.requests[element]);
+    });
+    this.selectedRows = [];
+    this.numSelected = 0;
     //Close modal
     jQuery('#declineMultipleRequests').modal('hide');
+
+    let emails = [];
     selected.forEach(element=>{
+      emails.push(element.email);
       //Delete request from Firestore
-      this.firebase.deleteRequest(element.email).then(response=>{
-        console.log(response);
-        //Refresh
-        this.router.navigate(['/list']);
-        //Send email
-        this.sendMail(`${element.firstname} ${element.lastname}`, element.email, false, `Reason: ${this.reason.value}`);  
+      this.firebase.deleteRequest(element.email).then(()=>{
+        //Delete request locally
+        this.requests = this.requests.filter(aux => aux.email !== element.email);  
       });
     });
-    
-    
+    //Send email
+    this.sendMailToMany(emails, this.reason.value);
   }
 
   sendMail(name:string, receiver:string, accepted:boolean, reason?:string){
@@ -173,6 +161,15 @@ export class ListComponent{
              + `&body=${encodeURIComponent(body)}`;
 
     window.location.href = link;
+  }
+
+  sendMailToMany(emails:string[], reason:string){
+    let name = "user";
+    let receivers = emails[0];
+    for(let i=1; i<emails.length; i++){
+      receivers = receivers.concat(`;${emails[i]}`);
+    }
+    this.sendMail(name, receivers, false, `Reason: ${reason}`);
   }
 
   resetVariable(multiple:true){

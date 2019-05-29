@@ -5,80 +5,42 @@
         <mat-card-subtitle align="left">You can accept or decline them. In any case your client will be opened with (Outlook, Thunderbird, etc.) a default message.</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <div class="mat-elevation-z8 table-responsive" *ngIf="requests.length > 0">
-            <table mat-table [dataSource]="dataSource" width="100%;" class="table">
-
-                <!-- Email Column -->
-                <ng-container matColumnDef="email">
-                    <th mat-header-cell *matHeaderCellDef> Email </th>
-                    <td mat-cell *matCellDef="let element"> {{element.email}} </td>
-                </ng-container>
-
-                <!-- Github Column -->
-                <ng-container matColumnDef="github">
-                    <th mat-header-cell *matHeaderCellDef> Github ID </th>
-                    <td mat-cell *matCellDef="let element"><a [href]="'https://github.com/' + element.github" target="_blank">{{element.github}}</a></td>
-                </ng-container>
-
-                <!-- Firstname Column -->
-                <ng-container matColumnDef="firstname">
-                    <th mat-header-cell *matHeaderCellDef> Firstname </th>
-                    <td mat-cell *matCellDef="let element"> {{element.firstname}} </td>
-                </ng-container>
-
-                <!-- Lastname Column -->
-                <ng-container matColumnDef="lastname">
-                    <th mat-header-cell *matHeaderCellDef> Lastname </th>
-                    <td mat-cell *matCellDef="let element"> {{element.lastname}} </td>
-                </ng-container>
-
-                <!-- Gender Column -->
-                <ng-container matColumnDef="gender">
-                    <th mat-header-cell *matHeaderCellDef> Gender </th>
-                    <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
-                </ng-container>
-
-                <!-- Birthdate Column -->
-                <ng-container matColumnDef="birthdate">
-                    <th mat-header-cell *matHeaderCellDef> Birthdate </th>
-                    <td mat-cell *matCellDef="let element"> {{element.birthdate}} </td>
-                </ng-container>
-
-                <!-- Job Column -->
-                <ng-container matColumnDef="job">
-                    <th mat-header-cell *matHeaderCellDef> Job Position </th>
-                    <td mat-cell *matCellDef="let element"> {{element.job}} </td>
-                </ng-container>
-
-                <!-- Studies Column -->
-                <ng-container matColumnDef="studies">
-                    <th mat-header-cell *matHeaderCellDef> Studies </th>
-                    <td mat-cell *matCellDef="let element"> {{element.studies}} </td>
-                </ng-container>
-
-                <!-- Office Column -->
-                <ng-container matColumnDef="office">
-                    <th mat-header-cell *matHeaderCellDef> Office </th>
-                    <td mat-cell *matCellDef="let element"> {{element.office}} </td>
-                </ng-container>
-
-                <!-- Checkbox Column -->
-                <ng-container matColumnDef="select">
-                    <th mat-header-cell *matHeaderCellDef>
-                        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="toggleOne()">
-                        </mat-checkbox>
-                    </th>
-                    <td mat-cell *matCellDef="let row; let i = $index;">
-                        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)" [aria-label]="toggleOne(row, i)">
-                        </mat-checkbox>
-                    </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></tr>
+        <div class="table-responsive" *ngIf="requests.length > 0">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Email</th>
+                        <th scope="col">Github ID</th>
+                        <th scope="col">Firstname</th>
+                        <th scope="col">Lastname</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Birthdate</th>
+                        <th scope="col">Job Position</th>
+                        <th scope="col">Studies</th>
+                        <th scope="col">Office</th>
+                        <th scope="col">Select</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let request of requests; let i = index;">
+                        <td>{{request.email}}</td>
+                        <td><a [href]="'https://github.com/' + request.github" target="_blank">{{request.github}}</a></td>
+                        <td>{{request.firstname}}</td>
+                        <td>{{request.lastname}}</td>
+                        <td>{{request.gender}}</td>
+                        <td>{{request.birthdate}}</td>
+                        <td>{{request.job}}</td>
+                        <td>{{request.studies}}</td>
+                        <td>{{request.office}}</td>
+                        <td>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" [id]="i" (click)="checkboxClicked(i)">
+                                <label class="custom-control-label" [for]="i"></label>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
-
-            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>
 
         <!-- NO REQUESTS -->
@@ -87,8 +49,8 @@
         </div>
     </mat-card-content>
     <mat-card-actions>
-        <button mat-raised-button color="primary" style="margin: 16px 8px;" [disabled]="selectedRows() !== 1" (click)="acceptRequest()"> Accept request </button>
-        <button mat-raised-button color="warn" style="margin: 16px 8px;" [disabled]="selectedRows() !== 1" data-toggle="modal" data-target="#declineRequest"> Decline request </button>
+        <button mat-raised-button color="primary" style="margin: 16px 8px;" [disabled]="numSelected !== 1" (click)="acceptRequest()"> Accept request </button>
+        <button mat-raised-button color="warn" style="margin: 16px 8px;" [disabled]="numSelected !== 1" data-toggle="modal" data-target="#declineRequest"> Decline request </button>
         <!-- Decline request modal -->
         <div class="modal fade" id="declineRequest" role="dialog">
             <div class="modal-dialog">
@@ -118,7 +80,7 @@
             </div>
         </div>
 
-        <button mat-raised-button color="warn" style="margin: 16px 8px;" [disabled]="selectedRows() === 1 || selectedRows() === 0" data-toggle="modal" data-target="#declineMultipleRequests"> Decline selected requests </button>
+        <button mat-raised-button color="warn" style="margin: 16px 8px;" [disabled]="numSelected === 1 || numSelected === 0" data-toggle="modal" data-target="#declineMultipleRequests"> Decline selected requests </button>
         <!-- Decline multiple requests modal -->
         <div class="modal fade" id="declineMultipleRequests" role="dialog">
             <div class="modal-dialog">
