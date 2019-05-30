@@ -114,7 +114,7 @@ export class ListComponent{
       //Close modal
       jQuery('#declineRequest').modal('hide');
       //Send email
-      this.sendMail(`${selected.firstname} ${selected.lastname}`, selected.email, false, `Reason: ${this.reason.value}`);
+      this.sendMail(`${selected.firstname} ${selected.lastname}`, selected.email, false, `Reason: ${this.getReason(this.reason.value)}.`);
     });
   }
 
@@ -144,14 +144,16 @@ export class ListComponent{
 
   sendMail(name:string, receiver:string, accepted:boolean, reason?:string){
     let subject = "";
-    let body = `Dear ${name},\r\n`;
+    let body = `Dear ${name},\r\n\r\n`;
     if(accepted){
       subject = "Welcome to the Chain of Custody system";
-      body = "The attachment sent is necessary for the correct use of CoC Application." +
+      body += "The attachment sent is necessary for the correct use of CoC Application." +
       "\r\n" + "First time you sign in, you will have to upload this file.";
     }else{
       subject = "Your request has been declined";
-      body = reason;
+      body += "Your request to participate in Chain of Custody system for the management of digital evidences has been declined." + 
+      "\r\n" + reason +
+      "\r\n" + "If you think there has been a misunderstanding, please send a new request or contact with us.";
     }
     body += "\r\n\r\n" + "Best Regards," +
     "\r\n" + "CoC App Administration Team";
@@ -169,16 +171,30 @@ export class ListComponent{
     for(let i=1; i<emails.length; i++){
       receivers = receivers.concat(`;${emails[i]}`);
     }
-    this.sendMail(name, receivers, false, `Reason: ${reason}`);
+    this.sendMail(name, receivers, false, `Reason: ${this.getReason(reason)}.`);
   }
 
   resetVariable(multiple:true){
+    let radioButtons;
     if(multiple){
-      (<HTMLInputElement>document.getElementById("declineMultipleReason")).value = "";
-      this.reason.setValue('');
+      radioButtons = document.getElementsByName("radioDeclineMultiple");
     }else{
-      (<HTMLInputElement>document.getElementById("declineReason")).value = "";
-      this.reason.setValue('');
+      radioButtons = document.getElementsByName("radioDecline");
+    }
+    radioButtons.forEach(element=>{
+      (<HTMLInputElement>element).checked = false;
+    });
+    this.reason.setValue('');
+  }
+
+  getReason(reason:string):string{
+    console.log(reason);
+    if(reason === 'no_github'){
+      return "Your Github ID does not exist";
+    }else if(reason === 'unknown'){
+      return "We can not verify who you are"
+    }else{
+      return reason;
     }
   }
   
