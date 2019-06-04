@@ -35,4 +35,8 @@
     <div class="alert alert-success offset-md-3 col-md-6" role="alert" *ngIf="uploaded">
         Card imported successfully
     </div>
+
+    <div class="alert alert-danger offset-md-3 col-md-6" role="alert" *ngIf="invalid_filename">
+        <b>File must end in <i>@cocv2.card</i></b>
+    </div>
 </div>

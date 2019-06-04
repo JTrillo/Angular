@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
   filename:string = "Choose a card";
   uploading:boolean;
   uploaded:boolean;
+  invalid_filename:boolean;
 
   constructor(private hyperledger:HyperledgerService,
               private userdata:UserDataService,
@@ -61,6 +62,7 @@ export class LoginComponent implements OnInit {
         this.card = new FormControl('', Validators.required);
         this.uploading = false;
         this.uploaded = false;
+        this.invalid_filename = false;
       }
     });
   }
@@ -69,15 +71,23 @@ export class LoginComponent implements OnInit {
 
   uploadCard(){
     //We have to store one card in user's wallet
-    this.uploading = true;
-    this.hyperledger.postImportCard(this.file, this.filename).subscribe(response=>{
-      console.log(response);
-      this.uploading = false;
-      this.uploaded = true;
-    });
+    let tokens = this.filename.split('@');
+    if(tokens[tokens.length-1] !== "cocv2.card"){ //Invalid file
+      this.invalid_filename = true;
+    }else{
+      this.invalid_filename = false;
+      this.uploading = true;
+      this.hyperledger.postImportCard(this.file, this.filename).subscribe(response=>{
+        console.log(response);
+        this.uploading = false;
+        this.uploaded = true;
+      });
+    }
   }
 
   getFile(event: FileList){
+    this.invalid_filename = false;
+
     this.file = event.item(0);
     this.filename = this.file.name;
   }

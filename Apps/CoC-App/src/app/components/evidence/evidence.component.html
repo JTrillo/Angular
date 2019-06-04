@@ -1,16 +1,27 @@
 <div>
-    <h1>Evidence {{evidence.identifier}} (case {{evidence.case.identifier}})</h1>
+    <h1>Evidence {{evidence.identifier}}</h1>
     <hr>
 
     <div class="form-group row">
+        <label class="col-md-1 col-form-label">Case ID</label>
+        <div class="col-md-5">
+            <input type="text" class="form-control" [value]="evidence.case.identifier" disabled>
+        </div>
+
+        <label class="col-md-2 col-form-label">Addition date</label>
+        <div class="col-md-4">
+            <input type="text" class="form-control" [value]="evidence.additionDate | date: 'dd/MM/yyyy HH:mm:ss z'" disabled>
+        </div>
+    </div>
+
+    <div class="form-group row">
         <label class="col-md-1 col-form-label">Hash</label>
-        <div class="col-md-6">
+        <div class="col-md-10">
             <input type="text" class="form-control" [value]="evidence.hash_value + ' (' + evidence.hash_type + ')'" disabled>
         </div>
 
-        <label class="col-md-2 col-form-label">Addition Date</label>
-        <div class="col-md-3">
-            <input type="date" class="form-control" [value]="additionDate" disabled>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-outline-primary btn-block" (click)="copyHash()">Copy</button>
         </div>
     </div>
 

@@ -16,7 +16,6 @@ declare var jQuery:any; //To import jQuery
 export class EvidenceComponent implements OnInit {
 
   evidence:Evidence;
-  additionDate:string;
 
   participants:string[] = []; //Participants in case that no are the current user
   participant_id:string; //Id of participant who is going to receive the evidence
@@ -33,7 +32,6 @@ export class EvidenceComponent implements OnInit {
     this.activatedroute.params.subscribe(params => {
       let evidence_id = params['evi_id'];
       this.evidence = this.userdata.getEvidence(evidence_id);
-      this.additionDate = this.dateToInputDate(this.evidence.additionDate);
       this.participants = this.removeCurrentUser(this.evidence.case.participants);
     });
     this.participant_id = undefined;
@@ -54,8 +52,19 @@ export class EvidenceComponent implements OnInit {
     this.noSelected = false;
   }
 
+  copyHash(){
+    document.addEventListener('copy', (e: ClipboardEvent) => {
+      e.clipboardData.setData('text/plain', (this.evidence.hash_value));
+      e.preventDefault();
+      document.removeEventListener('copy', null);
+    });
+    document.execCommand('copy');
+    alert('Hash copied to clipboard');
+  }
+
   transferEvidence(){
     if(this.participant_id!=undefined){
+      this.noSelected = false;
       console.log(`Transfer evidence to: ${this.participant_id}`);
       let participant_type = this.hyperledger.isDeposit(this.participant_id) ? 'DEPOSIT' : 'AGENT';
       //Llamar a la transacción del chaincode 'TransferEvidence'
@@ -87,13 +96,6 @@ export class EvidenceComponent implements OnInit {
 
   goBack(){
     this.location.back();
-  }
-
-  private dateToInputDate(date:Date): string{
-    let day = date.getDate() < 10 ? '0'+(date.getDate()) : date.getDate();
-    let month = date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1;
-    let aux = `${date.getFullYear()}-${month}-${day}`;
-    return aux;
   }
 
   private removeCurrentUser(participants:string[]): string[]{
