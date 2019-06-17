@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "hyperledger-jte"
+  },
+  "targets": {
+    "hyperledger-jte": {
+      "hosting": {
+        "user": [
+          "coc-app"
+        ]
+      }
+    }
+  }
+}

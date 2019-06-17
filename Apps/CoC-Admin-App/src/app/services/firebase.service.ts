@@ -39,7 +39,7 @@ export class FirebaseService {
   sendEmailLink(email:string){
     //Prepare things to send email
     let actionCodeSettings = {
-      url: 'http://localhost:4200/login',
+      url: 'https://coc-admin-app.firebaseapp.com/login',
       handleCodeInApp: true
     };
 

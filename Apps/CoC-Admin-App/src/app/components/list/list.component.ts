@@ -174,7 +174,7 @@ export class ListComponent{
     this.sendMail(name, receivers, false, `Reason: ${this.getReason(reason)}.`);
   }
 
-  resetVariable(multiple:true){
+  resetVariable(multiple:boolean){
     let radioButtons;
     if(multiple){
       radioButtons = document.getElementsByName("radioDeclineMultiple");

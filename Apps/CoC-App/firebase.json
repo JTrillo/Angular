@@ -1,0 +1,15 @@
+{
+    "hosting": {
+        "target": "user",
+        "public": "dist/CoC-App",
+        "ignore": [
+            "firebase.json",
+            "**/.*",
+            "**/node_modules/**"
+        ],
+        "rewrites": [{
+            "source": "**",
+            "destination": "/index.html"
+        }]
+    }
+}
