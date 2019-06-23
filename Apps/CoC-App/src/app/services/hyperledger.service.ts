@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-const API_ENDPOINT='http://104.155.2.231:3000/api/';
+const API_ENDPOINT='https://104.155.2.231:3000/api/';
 const NETWORK_NAMESPACE = 'uma.coc.network.';
 
 @Injectable({
