@@ -44,6 +44,18 @@ export class HyperledgerService {
     return this.http.get(resource_url, {withCredentials: true});
   }
 
+  //Get case with identifier id
+  getCase(id:string){
+    let resource_url = `${API_ENDPOINT}${NETWORK_NAMESPACE}Case/${id}`;
+    return this.http.get(resource_url, {withCredentials: true});
+  }
+
+  //Get evidence with identifier id
+  getEvidence(id:string){
+    let resource_url = `${API_ENDPOINT}${NETWORK_NAMESPACE}Evidence/${id}`;
+    return this.http.get(resource_url, {withCredentials: true});
+  }
+
   //Import one card to user's wallet
   postImportCard(card:File, cardname:string){
     let resource_url = `${API_ENDPOINT}wallet/import`;

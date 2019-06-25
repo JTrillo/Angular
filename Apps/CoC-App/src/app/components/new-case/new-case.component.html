@@ -21,7 +21,7 @@
         <div class="form-group row">
             <label class="col-md-2 col-form-label">&nbsp;</label>
             <div class="input-group col-md-10">
-                <button type="submit" class="btn btn-outline-primary" [disabled]="form.invalid">Add new case</button>
+                <button type="submit" class="btn btn-outline-primary" [disabled]="form.invalid || sent_tx">Add new case</button>
             </div>
         </div>
 
@@ -32,11 +32,14 @@
         </div>
 
         <div class="text-center">
+            <div class="alert alert-danger col-md-12" role="alert" *ngIf="id_used">
+                <b>Identifier {{form.value.identifier | uppercase}} is already used.</b>
+            </div>
             <div class="spinner-border" role="status" *ngIf="loading">
                 <span class="sr-only">Loading...</span>
             </div>
             <div class="alert alert-success col-md-12" role="alert" *ngIf="tx_id !== undefined">
-                Case {{form.value.identifier | uppercase}} created successfully (transaction id: {{tx_id}})
+                <b>Case {{form.value.identifier | uppercase}} created successfully</b> (transaction id: {{tx_id}})
             </div>
         </div>
 

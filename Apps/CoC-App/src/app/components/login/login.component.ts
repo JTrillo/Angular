@@ -113,12 +113,16 @@ export class LoginComponent implements OnInit {
       element['participants'].forEach(element2 => {
           participants.push(element2.split('#')[1]);
       });
+      let closureDate = undefined;
+      if(element['closureDate'] !== undefined){
+        closureDate = new Date(element['closureDate']);
+      }
       let caso:Case = {
         identifier: element['caseId'],
         description: element['description'],
         openingDate: new Date(element['openingDate']),
         resolution: element['resolution'],
-        closureDate: new Date(element['closureDate']),
+        closureDate: closureDate,
         status: element['status'],
         openedBy: element['openedBy'].split('#')[1],
         participants: participants

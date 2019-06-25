@@ -65,6 +65,9 @@
             </div>
         </div>
 
+        <div class="alert alert-danger col-md-12" role="alert" *ngIf="id_used">
+            <b>Identifier {{form.value.identifier | uppercase}} is already used.</b>
+        </div>
         <div class="text-center" *ngIf="executing_tx">
             <div class="spinner-border" role="status">
                 <span class="sr-only">Loading...</span>

@@ -51,7 +51,7 @@ export class CaseComponent implements OnInit {
     });
     
     this.openingDate = this.dateToInputDate(this.case.openingDate);
-    if(!isNaN(this.case.closureDate.getTime())){
+    if(this.closureDate !== null && this.closureDate !== undefined && !isNaN(this.case.closureDate.getTime())){
       this.closureDate = this.dateToInputDate(this.case.closureDate);
     }else{
       this.closureDate = this.today;

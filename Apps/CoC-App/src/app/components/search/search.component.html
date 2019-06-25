@@ -9,13 +9,17 @@
                     <tr>
                         <th>Case ID</th>
                         <th>Status</th>
-                        <th>Opened/Close since</th>
+                        <th>Opened/Closed since</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let case of cases">
                         <td><a [routerLink]="['/case', case.identifier]">{{case.identifier}}</a></td>
-                        <td>{{case.status}}</td>
+                        <td>
+                            {{case.status}}
+                            <img src="assets/lock_open.svg" *ngIf="case.status === 'OPENED'">
+                            <img src="assets/lock.svg" *ngIf="case.status !== 'OPENED'">
+                        </td>
                         <td *ngIf="case.status === 'OPENED'">{{case.openingDate | date: 'dd/MM/yyyy HH:mm:ss z'}}</td>
                         <td *ngIf="case.status !== 'OPENED'">{{case.closureDate | date: 'dd/MM/yyyy HH:mm:ss z'}}</td>
                     </tr>

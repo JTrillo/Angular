@@ -29,6 +29,7 @@ export class NewEvidenceComponent implements OnInit {
   // Progress monitoring
   percentage: Observable<number>;
 
+  id_used:boolean;
   executing_tx:boolean;
   uploading:boolean;
   end:boolean;
@@ -56,6 +57,7 @@ export class NewEvidenceComponent implements OnInit {
       'description': new FormControl('', Validators.required)
     });
 
+    this.id_used = false;
     this.executing_tx = false;
     this.uploading = false;
     this.end = false;
@@ -65,20 +67,28 @@ export class NewEvidenceComponent implements OnInit {
   }
 
   addEvidence(){
-    console.log( this.form.value );
     let identifier = this.form.value.identifier.toUpperCase();
-    let hash = this.form.value.hash_value;
-    let hash_type = this.form.value.hash_type;
-    let description = this.form.value.description;
-    //Llamar a la transacción del chaicode 'AddEvidence'
-    this.executing_tx = true;
-    this.hyperledger.postAddEvidence(identifier, hash, hash_type, description, this.file_extension, this.case_id).subscribe(response =>{
-      console.log(response);
-      this.executing_tx = false;
-      this.uploading = true;
-      //Si la transacción tiene éxito mostrar mensaje de éxito, subir la evidencia al repo de ficheros
-      this.uploadEvidence(identifier);
-    });
+    //Check if identifier is used
+    this.hyperledger.getEvidence(identifier).subscribe(
+      response => this.id_used = true,
+      err => {
+        this.id_used = false;
+
+        let hash = this.form.value.hash_value;
+        let hash_type = this.form.value.hash_type;
+        let description = this.form.value.description;
+        //Llamar a la transacción del chaicode 'AddEvidence'
+        this.executing_tx = true;
+        this.hyperledger.postAddEvidence(identifier, hash, hash_type, description, this.file_extension, this.case_id).subscribe(response =>{
+          console.log(response);
+          this.executing_tx = false;
+          this.uploading = true;
+          //Si la transacción tiene éxito mostrar mensaje de éxito, subir la evidencia al repo de ficheros
+          this.uploadEvidence(identifier);
+        });
+      }
+    )
+    
   }
 
   uploadEvidence(identifier:string){

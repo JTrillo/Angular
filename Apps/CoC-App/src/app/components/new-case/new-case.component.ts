@@ -12,6 +12,8 @@ import { UserDataService } from '../../services/user-data.service';
 export class NewCaseComponent implements OnInit {
 
   form:FormGroup;
+  id_used:boolean;
+  sent_tx:boolean;
   loading:boolean;
   tx_id:string;
 
@@ -21,35 +23,48 @@ export class NewCaseComponent implements OnInit {
       'identifier': new FormControl('', Validators.required),
       'description': new FormControl('', Validators.required)
     });
-    this.tx_id = undefined;
+    this.id_used = false;
+    this.sent_tx = false;
     this.loading = false;
+    this.tx_id = undefined;
   }
 
   ngOnInit() {
   }
   
   addCase(){
-    //console.log( this.form.value );
-    this.loading = true;
-    //Llamar a la transacción del chaincode 'OpenCase'
-    this.hyperledger.postNewCase(this.form.value.identifier.toUpperCase(), this.form.value.description).subscribe(response =>{
-      console.log(response);
-      //Add new case to user data service
-      let curr_user_id = this.userdata.getUserProfile().identifier;
-      let caso:Case = {
-        identifier: this.form.value.identifier,
-        description: this.form.value.description,
-        openingDate: new Date(response['timestamp']),
-        status: 'OPENED',
-        openedBy: curr_user_id,
-        participants: [curr_user_id, "0001"] //0001 is Málaga's deposit ID
+    let identifier = this.form.value.identifier.toUpperCase();
+    //Check if identifier is used
+    this.hyperledger.getCase(identifier).subscribe(
+      response => this.id_used = true,
+      err => {
+        this.id_used = false;
+
+        this.sent_tx = true;
+        this.loading = true;
+        //Llamar a la transacción del chaincode 'OpenCase'
+        this.hyperledger.postNewCase(identifier, this.form.value.description).subscribe(response =>{
+          console.log(response);
+          //Add new case to user data service
+          let curr_user_id = this.userdata.getUserProfile().identifier;
+          let caso:Case = {
+            identifier: this.form.value.identifier,
+            description: this.form.value.description,
+            openingDate: new Date(),
+            status: 'OPENED',
+            openedBy: curr_user_id,
+            participants: [curr_user_id, "0001"] //0001 is Málaga's deposit ID
+          }
+          let cases = this.userdata.getUserCases();
+          cases.push(caso);
+          this.userdata.setUserCases(cases);
+          //Stop loading spinner and show tx id message
+          this.loading = false;
+          this.tx_id = response['transactionId'];
+        });
       }
-      let cases = this.userdata.getUserCases();
-      cases.push(caso);
-      this.userdata.setUserCases(cases);
-      //Stop loading spinner and show tx id message
-      this.loading = false;
-      this.tx_id = response['transactionId'];
-    });
+    );
+
+    
   }
 }
