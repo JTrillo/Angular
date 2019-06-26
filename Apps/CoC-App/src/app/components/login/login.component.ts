@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
     }else{
       this.invalid_filename = false;
       this.uploading = true;
-      this.hyperledger.postImportCard(this.file, this.filename).subscribe(response=>{
+      this.hyperledger.postImportCard(this.file, tokens[0]).subscribe(response=>{
         console.log(response);
         this.uploading = false;
         this.uploaded = true;

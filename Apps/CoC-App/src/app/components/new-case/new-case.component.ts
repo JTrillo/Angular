@@ -48,7 +48,7 @@ export class NewCaseComponent implements OnInit {
           //Add new case to user data service
           let curr_user_id = this.userdata.getUserProfile().identifier;
           let caso:Case = {
-            identifier: this.form.value.identifier,
+            identifier: identifier,
             description: this.form.value.description,
             openingDate: new Date(),
             status: 'OPENED',

@@ -58,7 +58,7 @@ export class HyperledgerService {
 
   //Import one card to user's wallet
   postImportCard(card:File, cardname:string){
-    let resource_url = `${API_ENDPOINT}wallet/import`;
+    let resource_url = `${API_ENDPOINT}wallet/import?name=${cardname}`;
 
     const formData = new FormData();
     formData.append('card', card);

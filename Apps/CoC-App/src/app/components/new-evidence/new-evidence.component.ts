@@ -107,7 +107,7 @@ export class NewEvidenceComponent implements OnInit {
           //Add evidence to user data service
           let caso:Case = this.userdata.getCase(this.case_id);
           let evidence:Evidence = {
-            identifier: this.form.value.identifier,
+            identifier: this.form.value.identifier.toUpperCase(),
             hash_value: this.form.value.hash_value,
             hash_type: this.form.value.hash_type,
             description: this.form.value.description,
