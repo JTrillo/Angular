@@ -19,6 +19,8 @@ export class ListComponent{
   numSelected:number=0;
   selectedRows:number[]=[];
 
+  github_used:boolean;
+  github_selected:string;
 
   constructor(private firebase:FirebaseService, private hyperledger:HyperledgerService) {
     this.requests = [];
@@ -41,6 +43,7 @@ export class ListComponent{
     });
 
     this.reason = new FormControl('', Validators.required);
+    this.github_used = false;
   }
 
   //Quantity of rows selected
@@ -59,11 +62,11 @@ export class ListComponent{
   //Accept one request
   acceptRequest(){
     let selected:Request = this.requests[this.selectedRows[0]];
-    console.log(selected);
+    this.github_used = false;
+    this.github_selected = selected.github;
     //If request is accepted, we have to create the agent
     this.hyperledger.createAgent(selected.firstname, selected.lastname, selected.birthdate, selected.gender,
       selected.job, selected.studies, selected.office, selected.github).subscribe(response=>{
-        console.log(response);
         //Then we have to issue the identity
         this.hyperledger.issueIdentity(selected.github).subscribe(response2=>{
           console.log(response2);
@@ -98,6 +101,8 @@ export class ListComponent{
             this.sendMail(`${selected.firstname} ${selected.lastname}`, selected.email, true);
           });
         });
+    }, error =>{
+      this.github_used = true;
     });
     
   }
@@ -188,7 +193,7 @@ export class ListComponent{
   }
 
   getReason(reason:string):string{
-    console.log(reason);
+    //console.log(reason);
     if(reason === 'no_github'){
       return "Your Github ID does not exist";
     }else if(reason === 'unknown'){

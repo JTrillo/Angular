@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class HyperledgerService {
-  url = "http://104.155.2.231:3001/api/";
+  url = "https://104.155.2.231:3001/api/";
 
   constructor(private http:HttpClient) { }
 

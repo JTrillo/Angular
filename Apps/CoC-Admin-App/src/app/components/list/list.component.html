@@ -43,6 +43,10 @@
             </table>
         </div>
 
+        <div class="alert alert-danger col-md-12" *ngIf="github_used">
+            <b>Github id {{github_selected}} is already used in this system.</b>
+        </div>
+
         <!-- NO REQUESTS -->
         <div class="alert alert-info col-md-12" *ngIf="requests.length === 0">
             <b>There are no pending requests</b>
