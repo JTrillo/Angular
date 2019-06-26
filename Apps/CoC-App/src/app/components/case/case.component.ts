@@ -60,7 +60,7 @@ export class CaseComponent implements OnInit {
 
     //EVIDENCES
     this.hyperledger.getCaseEvidences(this.case.identifier).subscribe(response =>{
-      console.log(response);
+      //console.log(response);
       this.setEvidences(response);
     });
 
@@ -87,7 +87,7 @@ export class CaseComponent implements OnInit {
   closeCase(){
     if(this.form.valid){
       this.displayError=false;
-      console.log(this.form.value);
+      //console.log(this.form.value);
       let check = confirm(`¿Está seguro de que desea cerrar el caso ${this.case.identifier}?`);
       if(check){
         console.log("Closing case...");
@@ -124,12 +124,10 @@ export class CaseComponent implements OnInit {
         this.switchControl = 5;
         this.hyperledger.getProfile(this.newParticipantId).subscribe(response =>{
           //User exists in system
-          console.log(response);
           this.switchControl = 3;
           this.newParticipantDisplay = `${response['lastName']}, ${response['firstName']} (${response['participantId']})`;
         }, error => {
           //User does not exist in system
-          console.log(error);
           this.switchControl = 1; //Show an error
         });
       }
